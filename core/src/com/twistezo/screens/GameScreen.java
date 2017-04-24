@@ -1,15 +1,16 @@
 package com.twistezo.screens;
 
 import com.twistezo.NinjaGame;
-import com.twistezo.entities.Player;
+import com.twistezo.playground.PlayerFromAtlas;
+import com.twistezo.playground.PlayerFromSheet;
 
 /**
  * @author twistezo (24.04.2017)
  */
 
 public class GameScreen extends AbstractScreen {
-
-    Player player;
+    PlayerFromSheet playerFromSheet;
+    PlayerFromAtlas playerFromAtlas;
 
     public GameScreen(NinjaGame game) {
         super(game);
@@ -22,15 +23,22 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void initPlayer() {
-        player = new Player();
-        player.setDebug(true);
-        stage.addActor(player);
+        playerFromSheet = new PlayerFromSheet();
+        playerFromSheet.setSize(playerFromSheet.getRegionWidth()/2, playerFromSheet.getRegionHeight()/2);
+        playerFromSheet.setPosition(100, 50);
+        playerFromSheet.setDebug(true);
+        stage.addActor(playerFromSheet);
+
+        playerFromAtlas = new PlayerFromAtlas();
+        playerFromAtlas.setSize(playerFromSheet.getRegionWidth()/2, playerFromSheet.getRegionHeight()/2);
+        playerFromAtlas.setPosition(300, 50);
+        playerFromAtlas.setDebug(true);
+        stage.addActor(playerFromAtlas);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-
         update();
         stage.draw();
     }

@@ -1,7 +1,6 @@
-package com.twistezo.entities;
+package com.twistezo.playground;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -12,22 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * @author twistezo (23.04.2017)
  */
 
-public class Player extends Actor {
+public class PlayerFromSheet extends Actor {
     private static final int FRAME_COLS = 10, FRAME_ROWS = 1;
-    Animation<TextureRegion> walkAnimation;
-    Texture walkSheet;
-    private final static int STARTING_X = 50;
-    private final static int STARTING_Y = 50;
-    TextureRegion reg;
-    float stateTime;
+    private Animation<TextureRegion> walkAnimation;
+    private TextureRegion textureRegion;
+    private float stateTime;
 
-    public Player(){
-        createIdleAnimation();
-        this.setPosition(STARTING_X, STARTING_Y);
+    public PlayerFromSheet(){
+        generateRegionFromSheet();
     }
 
-    private void createIdleAnimation() {
-        walkSheet = new Texture(Gdx.files.internal("sheets/ninja-idle-sheet.png"));
+    private void generateRegionFromSheet() {
+        Texture walkSheet = new Texture(Gdx.files.internal("sheets/ninja-idle-sheet.png"));
 
         TextureRegion[][] tmp = TextureRegion.split(walkSheet,
                 walkSheet.getWidth() / FRAME_COLS,
@@ -43,7 +38,7 @@ public class Player extends Actor {
 
         walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
         stateTime = 0f;
-        reg=walkAnimation.getKeyFrame(0);
+        textureRegion = walkAnimation.getKeyFrame(0);
     }
 
     @Override
@@ -51,16 +46,26 @@ public class Player extends Actor {
         super.act(delta);
 
         stateTime += delta;
-        reg = walkAnimation.getKeyFrame(stateTime,true);
+        textureRegion = walkAnimation.getKeyFrame(stateTime,true);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+        batch.draw(textureRegion,
+                getX(),getY(),
+                getWidth()/2,getHeight()/2,
+                getWidth(),getHeight(),
+                getScaleX(),getScaleY(),
+                getRotation());
+    }
 
-        Color color = getColor();
-        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(reg,getX(),getY(),getWidth()/2,getHeight()/2,getWidth(),getHeight(),getScaleX(),getScaleY(),getRotation());
+    public float getRegionHeight() {
+        return textureRegion.getRegionHeight();
+    }
+
+    public float getRegionWidth() {
+        return textureRegion.getRegionWidth();
     }
 }
 

@@ -7,14 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.twistezo.NinjaGame;
-import com.twistezo.entities.Player;
+import com.twistezo.playground.PlayerFromSheet;
 
 /**
  * @author twistezo (23.04.2017)
  */
 
 public class MenuScreen extends AbstractScreen {
-    private Player player;
+    private PlayerFromSheet playerFromSheet;
     private Texture background;
     private Image backgroundImg;
     private MyButton playButton;
