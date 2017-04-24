@@ -11,6 +11,7 @@ import com.twistezo.NinjaGame;
 
 /**
  * @author twistezo (23.04.2017)
+ * Abstract class for cleaning up every children screen classes
  */
 
 public abstract class AbstractScreen implements Screen {
@@ -22,14 +23,28 @@ public abstract class AbstractScreen implements Screen {
     public AbstractScreen(NinjaGame game) {
         this.game = game;
         createCamera();
+        /* Stage for actors */
         stage = new Stage(new StretchViewport(NinjaGame.SCREEN_WIDTH, NinjaGame.SCREEN_HEIGHT, camera));
+        /* Batch for sprites */
         spriteBatch = new SpriteBatch();
+        /* Stage takes user inputs */
         Gdx.input.setInputProcessor(stage);
+        init();
     }
 
-    @Override
-    public void show() {
+    protected abstract void init();
 
+    private void createCamera() {
+        /* Orthographic means like in CAD drawings */
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, NinjaGame.SCREEN_WIDTH, NinjaGame.SCREEN_HEIGHT);
+        camera.update();
+    }
+
+    /** Clean screen on black color between render frames */
+    private void clearScreen() {
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
@@ -40,8 +55,11 @@ public abstract class AbstractScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void show() {
+    }
 
+    @Override
+    public void resize(int width, int height) {
     }
 
     @Override
@@ -56,22 +74,10 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void hide() {
-
     }
 
     @Override
     public void dispose() {
         game.dispose();
-    }
-
-    private void createCamera() {
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, NinjaGame.SCREEN_WIDTH, NinjaGame.SCREEN_HEIGHT);
-        camera.update();
-    }
-
-    private void clearScreen() {
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 }
