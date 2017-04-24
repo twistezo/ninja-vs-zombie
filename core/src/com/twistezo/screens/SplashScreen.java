@@ -1,6 +1,7 @@
 package com.twistezo.screens;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Timer;
 import com.twistezo.NinjaGame;
 
 /**
@@ -10,15 +11,24 @@ import com.twistezo.NinjaGame;
 public class SplashScreen extends AbstractScreen {
     private Texture splashImg;
 
-    public SplashScreen(NinjaGame game) {
+    public SplashScreen(final NinjaGame game) {
         super(game);
         init();
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                game.setScreen(new MenuScreen(game));
+            }
+        }, 1);
     }
 
-    private void init() {
+    @Override
+    protected void init() {
         // TODO implement better assets loading when game grows
-        splashImg = new Texture("badlogic.jpg");
+        splashImg = new Texture("menu/background.png");
     }
+
 
     @Override
     public void render(float delta) {
