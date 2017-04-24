@@ -11,6 +11,8 @@ public class DesktopLauncher {
 		config.title = "Drop";
 		config.width = GameSettings.SCREEN_WIDTH;
 		config.height = GameSettings.SCREEN_HEIGHT;
+        config.title = NinjaGame.GAME_NAME;
+        config.resizable = false;
 		new LwjglApplication(new NinjaGame(), config);
 	}
 }
