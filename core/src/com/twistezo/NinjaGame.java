@@ -10,6 +10,7 @@ import com.twistezo.screens.SplashScreen;
 public class NinjaGame extends Game{
     public final static int SCREEN_WIDTH = 800;
     public final static int SCREEN_HEIGHT = 480;
+    public final static String GAME_NAME = "ninja vs zombie";
     private boolean paused;
 
     @Override
