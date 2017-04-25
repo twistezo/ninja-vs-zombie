@@ -1,0 +1,75 @@
+zombie-female-run-right.png
+size: 1563, 2304
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Walk (1)
+  rotate: false
+  xy: 0, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (2)
+  rotate: false
+  xy: 521, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (3)
+  rotate: false
+  xy: 1042, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (4)
+  rotate: false
+  xy: 0, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (5)
+  rotate: false
+  xy: 521, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (6)
+  rotate: false
+  xy: 1042, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (7)
+  rotate: false
+  xy: 0, 1152
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (8)
+  rotate: false
+  xy: 521, 1152
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (9)
+  rotate: false
+  xy: 1042, 1152
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (10)
+  rotate: false
+  xy: 0, 1728
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
