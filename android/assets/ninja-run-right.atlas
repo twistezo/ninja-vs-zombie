@@ -1,0 +1,75 @@
+ninja-run-right.png
+size: 1815, 916
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Run_
+  rotate: false
+  xy: 0, 0
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 0
+Run_
+  rotate: false
+  xy: 363, 0
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 1
+Run_
+  rotate: false
+  xy: 726, 0
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 2
+Run_
+  rotate: false
+  xy: 1089, 0
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 3
+Run_
+  rotate: false
+  xy: 1452, 0
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 4
+Run_
+  rotate: false
+  xy: 0, 458
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 5
+Run_
+  rotate: false
+  xy: 363, 458
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 6
+Run_
+  rotate: false
+  xy: 726, 458
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 7
+Run_
+  rotate: false
+  xy: 1089, 458
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 8
+Run_
+  rotate: false
+  xy: 1452, 458
+  size: 363, 458
+  orig: 363, 458
+  offset: 0, 0
+  index: 9

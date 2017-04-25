@@ -1,0 +1,75 @@
+ninja-idle.png
+size: 928, 1317
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Idle_
+  rotate: false
+  xy: 0, 0
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 0
+Idle_
+  rotate: false
+  xy: 232, 0
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 1
+Idle_
+  rotate: false
+  xy: 464, 0
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 2
+Idle_
+  rotate: false
+  xy: 696, 0
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 3
+Idle_
+  rotate: false
+  xy: 0, 439
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 4
+Idle_
+  rotate: false
+  xy: 232, 439
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 5
+Idle_
+  rotate: false
+  xy: 464, 439
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 6
+Idle_
+  rotate: false
+  xy: 696, 439
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 7
+Idle_
+  rotate: false
+  xy: 0, 878
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 8
+Idle_
+  rotate: false
+  xy: 232, 878
+  size: 232, 439
+  orig: 232, 439
+  offset: 0, 0
+  index: 9
