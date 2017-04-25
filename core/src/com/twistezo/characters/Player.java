@@ -17,86 +17,67 @@ import com.twistezo.NinjaGame;
  */
 
 public class Player extends Actor {
-    private final String NINJA_IDLE = "ninja-idle.atlas";
-    private final String NINJA_RUN_LEFT = "ninja-run-left.atlas";
-    private final String NINJA_RUN_RIGHT = "ninja-run-right.atlas";
+    private final String NINJA_IDLE_FILE = "ninja-idle.atlas";
+    private final String NINJA_MOVE_FILE = "ninja-run-right.atlas";
     private final float MOVEMENT_DURATION = 1/10f;
     private final float FRAME_DURATION = 1/10f;
-    private final int MOVEMENT_STEP = 20;
-    private final float PLAYER_SCALE = 0.5f;
-    private Movement movement;
+    private final int MOVEMENT_STEP = 10;
+    private final float PLAYER_SCALE = 1/3f;
     private SpriteBatch spriteBatch;
-    private TextureAtlas textureAtlas;
-    private Animation<TextureRegion> animation;
+    private TextureAtlas textureAtlasIdle;
+    private TextureAtlas textureAtlasMove;
+    private Animation<TextureRegion> animationIdle;
+    private Animation<TextureRegion> animationMove;
     private TextureRegion textureRegion;
     private float stateTime = 0;
+    private boolean isPlayerFlippedToLeft = false;
 
     public Player() {
         spriteBatch = new SpriteBatch();
-        generateAnimation("IDLE");
+        generateAnimations();
     }
 
-    private enum Movement {
-        IDLE,
-        LEFT,
-        RIGHT,
-        UP
-    }
-
-    private void generateAnimation(String atlasName) {
-        switch(Movement.valueOf(atlasName)) {
-            case IDLE:
-                textureAtlas = new TextureAtlas(Gdx.files.internal(NINJA_IDLE));
-                animation = new Animation<TextureRegion>(FRAME_DURATION, textureAtlas.getRegions());
-                break;
-            case LEFT:
-                textureAtlas = new TextureAtlas(Gdx.files.internal(NINJA_RUN_LEFT));
-                animation = new Animation<TextureRegion>(FRAME_DURATION, textureAtlas.getRegions());
-                break;
-            case RIGHT:
-                textureAtlas = new TextureAtlas(Gdx.files.internal(NINJA_RUN_RIGHT));
-                animation = new Animation<TextureRegion>(FRAME_DURATION, textureAtlas.getRegions());
-                break;
-            case UP:
-                // TODO up movement
-                break;
-            default:
-                textureAtlas = new TextureAtlas(Gdx.files.internal(NINJA_IDLE));
-                animation = new Animation<TextureRegion>(FRAME_DURATION, textureAtlas.getRegions());
-                break;
-        }
+    private void generateAnimations() {
+        textureAtlasIdle = new TextureAtlas(Gdx.files.internal(NINJA_IDLE_FILE));
+        animationIdle = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasIdle.getRegions());
+        textureAtlasMove = new TextureAtlas(Gdx.files.internal(NINJA_MOVE_FILE));
+        animationMove = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasMove.getRegions());
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
 
-        /* Make animation depends on frames */
+        /* Make animationIdle depends on frames */
         stateTime += delta;
-        textureRegion = animation.getKeyFrame(stateTime,true);
+        textureRegion = animationIdle.getKeyFrame(stateTime, true);
+
+        /* Set correct width and height for different sizes of textureRegions */
         setPlayerWidthAndHeight();
 
         /* Keyboard events */
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            moveLeft();
+            textureRegion = animationMove.getKeyFrame(stateTime,true);
+            isPlayerFlippedToLeft = true;
+            setPlayerWidthAndHeight();
+            this.addAction(Actions.moveTo(getX() - MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            moveRight();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            idle();
+            textureRegion = animationMove.getKeyFrame(stateTime,true);
+            isPlayerFlippedToLeft = false;
+            setPlayerWidthAndHeight();
+            this.addAction(Actions.moveTo(getX() + MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
         }
 
         /* Mouse/Touch events */
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            generateAnimation("RIGHT");
             this.addAction(Actions.moveTo(touchPos.x - this.getWidth()/2, getY(), MOVEMENT_DURATION));
         }
 
         /* Hold player in screen bounds */
-        if (this.getX() < 0 ) {
+        if (this.getX() < 0) {
             this.setPosition(0, 50);
         }
         if (this.getX() > NinjaGame.SCREEN_WIDTH - this.getWidth()) {
@@ -107,36 +88,26 @@ public class Player extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(textureRegion,
-                getX(),getY(),
-                getWidth()/2,getHeight()/2,
-                getWidth(), getHeight(),
-                getScaleX(),getScaleY(),
-                getRotation());
+        if (isPlayerFlippedToLeft) {
+            batch.draw(textureRegion,
+                    getX(),getY(),
+                    getWidth()/2,getHeight()/2,
+                    getWidth(), getHeight(),
+                    getScaleX()*-1,getScaleY(),
+                    getRotation());
+        } else {
+            batch.draw(textureRegion,
+                    getX(),getY(),
+                    getWidth()/2,getHeight()/2,
+                    getWidth(), getHeight(),
+                    getScaleX(),getScaleY(),
+                    getRotation());
+        }
     }
 
     private void setPlayerWidthAndHeight() {
         setWidth(textureRegion.getRegionWidth() * PLAYER_SCALE);
         setHeight(textureRegion.getRegionHeight() * PLAYER_SCALE);
-    }
-
-    private void moveLeft() {
-        setPlayerWidthAndHeight();
-        generateAnimation("LEFT");
-//            this.setPosition(getX()-MOVEMENT_STEP, getY());
-        this.addAction(Actions.moveTo(getX()- MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
-    }
-
-    private void moveRight() {
-        setPlayerWidthAndHeight();
-        generateAnimation("RIGHT");
-        this.setPosition(getX()+MOVEMENT_STEP, getY());
-//            this.addAction(Actions.moveTo(getX()+ MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
-    }
-
-    private void idle() {
-        setPlayerWidthAndHeight();
-        generateAnimation("IDLE");
     }
 
     @Override
