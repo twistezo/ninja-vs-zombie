@@ -1,0 +1,89 @@
+zombie-female-dead.png
+size: 1368, 3762
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Dead (1)
+  rotate: false
+  xy: 0, 0
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (2)
+  rotate: false
+  xy: 684, 0
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (3)
+  rotate: false
+  xy: 0, 627
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (4)
+  rotate: false
+  xy: 684, 627
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (5)
+  rotate: false
+  xy: 0, 1254
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (6)
+  rotate: false
+  xy: 684, 1254
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (7)
+  rotate: false
+  xy: 0, 1881
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (8)
+  rotate: false
+  xy: 684, 1881
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (9)
+  rotate: false
+  xy: 0, 2508
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (10)
+  rotate: false
+  xy: 684, 2508
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (11)
+  rotate: false
+  xy: 0, 3135
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1
+Dead (12)
+  rotate: false
+  xy: 684, 3135
+  size: 684, 627
+  orig: 684, 627
+  offset: 0, 0
+  index: -1

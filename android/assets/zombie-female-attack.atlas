@@ -1,0 +1,61 @@
+zombie-female-attack.png
+size: 1563, 1728
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Attack (1)
+  rotate: false
+  xy: 0, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Attack (2)
+  rotate: false
+  xy: 521, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Attack (3)
+  rotate: false
+  xy: 1042, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Attack (4)
+  rotate: false
+  xy: 0, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Attack (5)
+  rotate: false
+  xy: 521, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Attack (6)
+  rotate: false
+  xy: 1042, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Attack (7)
+  rotate: false
+  xy: 0, 1152
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Attack (8)
+  rotate: false
+  xy: 521, 1152
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
