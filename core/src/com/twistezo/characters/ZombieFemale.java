@@ -17,18 +17,32 @@ import com.twistezo.NinjaGame;
 
 public class ZombieFemale extends Actor {
     private final String ZOMBIE_FEMALE_MOVE_FILE = "zombie-female-run-right.atlas";
-    private final float MOVEMENT_DURATION = 120f;
+    private final String ZOMBIE_FEMALE_ATTACK_FILE = "zombie-female-attack.atlas";
+    private final float MOVEMENT_DURATION = 60f;
     private final float FRAME_DURATION = 1/10f;
-    private final float ZOMBIE_SCALE = 1/3f;
+    private final float ZOMBIE_SCALE = 1/4f;
     private SpriteBatch spriteBatch;
     private TextureAtlas textureAtlasMove;
+    private TextureAtlas textureAtlasAttack;
     private Animation<TextureRegion> animationMove;
+    private Animation<TextureRegion> animationAttack;
     private TextureRegion textureRegion;
     private Rectangle bounds;
     private float stateTime = 0;
     private boolean isPlayerFlippedToLeft = false;
+    private boolean isInPlayerBounds = false;
+    private boolean moveToRight = false;
 
-    public ZombieFemale() {
+    public ZombieFemale(boolean moveToRight) {
+        this.setY(50);
+        if(moveToRight) {
+//            this.setX(-521*ZOMBIE_SCALE);
+            this.setX(0);
+        } else if (!moveToRight) {
+            this.setX(NinjaGame.SCREEN_WIDTH-100);
+        }
+        this.setSize(this.getWidth(), this.getHeight());
+        this.moveToRight = moveToRight;
         spriteBatch = new SpriteBatch();
         generateAnimations();
     }
@@ -36,13 +50,15 @@ public class ZombieFemale extends Actor {
     private void generateAnimations() {
         textureAtlasMove = new TextureAtlas(Gdx.files.internal(ZOMBIE_FEMALE_MOVE_FILE));
         animationMove = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasMove.getRegions());
+        textureAtlasAttack = new TextureAtlas(Gdx.files.internal(ZOMBIE_FEMALE_ATTACK_FILE));
+        animationAttack = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasAttack.getRegions());
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
 
-        /* Make animationIdle depends on frames */
+        /* Make animationMove depends on frames */
         stateTime += delta;
         textureRegion = animationMove.getKeyFrame(stateTime, true);
 
@@ -50,8 +66,36 @@ public class ZombieFemale extends Actor {
         setZombieWidthAndHeight();
 
         /* Zombie walk */
-        this.addAction(Actions.moveTo(NinjaGame.SCREEN_WIDTH - this.getWidth(), getY(), MOVEMENT_DURATION));
+        if(!isInPlayerBounds){
+            walk(moveToRight);
+        }
+
+        /* Attack when zombie is in player bounds */
+        if(isInPlayerBounds) {
+            clearActions();
+            if (moveToRight) {
+                textureRegion = animationAttack.getKeyFrame(stateTime,true);
+            } else if (!moveToRight) {
+                isPlayerFlippedToLeft = true;
+                textureRegion = animationAttack.getKeyFrame(stateTime,true);
+            }
+            setZombieWidthAndHeight();
+        }
     }
+
+    private void walk(boolean moveToRight) {
+        if (moveToRight) {
+            this.addAction(Actions.moveTo(NinjaGame.SCREEN_WIDTH-this.getWidth()/2, getY(), MOVEMENT_DURATION));
+        } else if (!moveToRight) {
+            isPlayerFlippedToLeft = true;
+            this.addAction(Actions.moveTo(-this.getWidth()/2, getY(), MOVEMENT_DURATION));
+        }
+    }
+
+    public void setDirection(boolean moveToRight) {
+        this.moveToRight = moveToRight;
+    }
+
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -93,9 +137,11 @@ public class ZombieFemale extends Actor {
         return bounds;
     }
 
-    private void setXY(float pX,float pY) {
-        setPosition(pX, pY);
-        bounds.setX((int)pX);
-        bounds.setY((int)pY);
+    public boolean isInPlayerBounds() {
+        return isInPlayerBounds;
+    }
+
+    public void setInPlayerBounds(boolean inPlayerBounds) {
+        isInPlayerBounds = inPlayerBounds;
     }
 }
