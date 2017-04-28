@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -19,6 +20,7 @@ import com.twistezo.NinjaGame;
 public class Player extends Actor {
     private final String NINJA_IDLE_FILE = "ninja-idle.atlas";
     private final String NINJA_MOVE_FILE = "ninja-run-right.atlas";
+    private final String NINJA_ATTACK_FILE = "ninja-attack.atlas";
     private final float MOVEMENT_DURATION = 1/10f;
     private final float FRAME_DURATION = 1/10f;
     private final int MOVEMENT_STEP = 10;
@@ -26,11 +28,17 @@ public class Player extends Actor {
     private SpriteBatch spriteBatch;
     private TextureAtlas textureAtlasIdle;
     private TextureAtlas textureAtlasMove;
+    private TextureAtlas textureAtlasAttack;
     private Animation<TextureRegion> animationIdle;
     private Animation<TextureRegion> animationMove;
+    private Animation<TextureRegion> animationAttack;
     private TextureRegion textureRegion;
+    private Rectangle bounds;
     private float stateTime = 0;
     private boolean isPlayerFlippedToLeft = false;
+    private boolean isInEnemyBounds = false;
+    private boolean moveToRight = false;
+    private boolean isAttacking = false;
 
     public Player() {
         spriteBatch = new SpriteBatch();
@@ -42,6 +50,8 @@ public class Player extends Actor {
         animationIdle = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasIdle.getRegions());
         textureAtlasMove = new TextureAtlas(Gdx.files.internal(NINJA_MOVE_FILE));
         animationMove = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasMove.getRegions());
+        textureAtlasAttack = new TextureAtlas(Gdx.files.internal(NINJA_ATTACK_FILE));
+        animationAttack = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasAttack.getRegions());
     }
 
     @Override
@@ -55,6 +65,10 @@ public class Player extends Actor {
         /* Set correct width and height for different sizes of textureRegions */
         setPlayerWidthAndHeight();
 
+        if(isInEnemyBounds) {
+            //TODO bounds not working properly
+        }
+
         /* Keyboard events */
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             textureRegion = animationMove.getKeyFrame(stateTime,true);
@@ -66,7 +80,22 @@ public class Player extends Actor {
             textureRegion = animationMove.getKeyFrame(stateTime,true);
             isPlayerFlippedToLeft = false;
             setPlayerWidthAndHeight();
+            moveToRight = true;
             this.addAction(Actions.moveTo(getX() + MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
+        }
+
+        setAttacking(false);
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            setAttacking(true);
+            if (moveToRight) {
+                textureRegion = animationAttack.getKeyFrame(stateTime,true);
+            } else if (!moveToRight) {
+                isPlayerFlippedToLeft = true;
+                textureRegion = animationAttack.getKeyFrame(stateTime,true);
+
+            }
+            animationAttack.isAnimationFinished(stateTime);
+            setPlayerWidthAndHeight();
         }
 
         /* Mouse/Touch events */
@@ -83,6 +112,9 @@ public class Player extends Actor {
         if (this.getX() > NinjaGame.SCREEN_WIDTH - this.getWidth()) {
             this.setPosition(NinjaGame.SCREEN_WIDTH - this.getWidth(), getY());
         }
+
+         /* Updater setter for player X position */
+        getPlayerCurrentX();
     }
 
     @Override
@@ -118,6 +150,31 @@ public class Player extends Actor {
     @Override
     public void setHeight(float height) {
         super.setHeight(height);
+    }
+
+    public Rectangle getBounds() {
+        bounds = new Rectangle((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+        return bounds;
+    }
+
+    public float getPlayerCurrentX() {
+        return this.getX();
+    }
+
+    public boolean isInEnemyBounds() {
+        return isInEnemyBounds;
+    }
+
+    public void setInEnemyBounds(boolean inEnemyBounds) {
+        isInEnemyBounds = inEnemyBounds;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
     }
 }
 
