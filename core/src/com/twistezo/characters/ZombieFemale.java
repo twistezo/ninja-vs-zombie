@@ -1,11 +1,14 @@
 package com.twistezo.characters;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -18,9 +21,10 @@ import com.twistezo.NinjaGame;
 public class ZombieFemale extends Actor {
     private final String ZOMBIE_FEMALE_MOVE_FILE = "zombie-female-run-right.atlas";
     private final String ZOMBIE_FEMALE_ATTACK_FILE = "zombie-female-attack.atlas";
-    private final float MOVEMENT_DURATION = 10f;
+    private final float MOVEMENT_DURATION = 60f;
     private final float FRAME_DURATION = 1/10f;
     private final float ZOMBIE_SCALE = 1/4f;
+    private final int BOUNDS_SHIFT = 20;
     private SpriteBatch spriteBatch;
     private TextureAtlas textureAtlasMove;
     private TextureAtlas textureAtlasAttack;
@@ -28,12 +32,14 @@ public class ZombieFemale extends Actor {
     private Animation<TextureRegion> animationAttack;
     private TextureRegion textureRegion;
     private Rectangle bounds;
+    private ShapeRenderer shapeRenderer;
     private float stateTime = 0;
     private float walkTargetX = 0;
-    private int health = 1000;
+    private int health = 100;
     private boolean isPlayerFlippedToLeft = false;
     private boolean isInEnemyBounds = false;
     private boolean isMovingToRight = false;
+    private boolean isDebugMode = false;
 
     public ZombieFemale(boolean isMovingToRight) {
         this.setY(50);
@@ -46,6 +52,7 @@ public class ZombieFemale extends Actor {
         this.isMovingToRight = isMovingToRight;
         spriteBatch = new SpriteBatch();
         generateAnimations();
+        shapeRenderer = new ShapeRenderer();
     }
 
     private void generateAnimations() {
@@ -131,6 +138,11 @@ public class ZombieFemale extends Actor {
                     getScaleX(),getScaleY(),
                     getRotation());
         }
+        if(isDebugMode) {
+            batch.end();
+            drawDebugBounds();
+            batch.begin();
+        }
     }
 
     private void setZombieWidthAndHeight() {
@@ -149,8 +161,18 @@ public class ZombieFemale extends Actor {
     }
 
     public Rectangle getBounds() {
-        bounds = new Rectangle((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+        bounds = new Rectangle((int)getX() + BOUNDS_SHIFT, (int)getY(), (int)getWidth() - 2 * BOUNDS_SHIFT, (int)getHeight());
         return bounds;
+    }
+
+    private void drawDebugBounds() {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(1, 0, 0, 0.5f)); // last argument is alpha channel
+        shapeRenderer.rect(getX() + BOUNDS_SHIFT, getY(), getWidth() - 2 * BOUNDS_SHIFT, getHeight());
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     public boolean isInEnemyBounds() {
@@ -171,5 +193,9 @@ public class ZombieFemale extends Actor {
 
     public int getHealth() {
         return this.health;
+    }
+
+    public void setDebugMode(boolean debugMode) {
+        this.isDebugMode = debugMode;
     }
 }
