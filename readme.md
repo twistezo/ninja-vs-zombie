@@ -1,6 +1,10 @@
 # ninja-vs-zombie
 Android/Desktop game made with libGDX
 
+To run:
+
+`use run-desktop-mode.bat file`
+
 <table>
     <tr>
         <td>
