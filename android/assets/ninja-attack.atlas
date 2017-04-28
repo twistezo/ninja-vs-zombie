@@ -1,75 +1,75 @@
 ninja-attack.png
-size: 1608, 1980
+size: 1604, 1816
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 Attack_
   rotate: false
-  xy: 0, 0
-  size: 536, 495
-  orig: 536, 495
+  xy: 1067, 454
+  size: 536, 454
+  orig: 536, 454
   offset: 0, 0
   index: 0
 Attack_
   rotate: false
-  xy: 536, 0
-  size: 536, 495
-  orig: 536, 495
+  xy: 537, 908
+  size: 537, 454
+  orig: 537, 454
   offset: 0, 0
   index: 1
 Attack_
   rotate: false
-  xy: 1072, 0
-  size: 536, 495
-  orig: 536, 495
+  xy: 537, 1362
+  size: 537, 454
+  orig: 537, 454
   offset: 0, 0
   index: 2
 Attack_
   rotate: false
-  xy: 0, 495
-  size: 536, 495
-  orig: 536, 495
+  xy: 0, 1362
+  size: 537, 454
+  orig: 537, 454
   offset: 0, 0
   index: 3
 Attack_
   rotate: false
-  xy: 536, 495
-  size: 536, 495
-  orig: 536, 495
+  xy: 0, 908
+  size: 537, 454
+  orig: 537, 454
   offset: 0, 0
   index: 4
 Attack_
   rotate: false
-  xy: 1072, 495
-  size: 536, 495
-  orig: 536, 495
+  xy: 531, 454
+  size: 536, 454
+  orig: 536, 454
   offset: 0, 0
   index: 5
 Attack_
   rotate: false
-  xy: 0, 990
-  size: 536, 495
-  orig: 536, 495
+  xy: 536, 0
+  size: 531, 454
+  orig: 531, 454
   offset: 0, 0
   index: 6
 Attack_
   rotate: false
-  xy: 536, 990
-  size: 536, 495
-  orig: 536, 495
+  xy: 0, 454
+  size: 531, 454
+  orig: 531, 454
   offset: 0, 0
   index: 7
 Attack_
   rotate: false
-  xy: 1072, 990
-  size: 536, 495
-  orig: 536, 495
+  xy: 1067, 0
+  size: 537, 454
+  orig: 537, 454
   offset: 0, 0
   index: 8
 Attack_
   rotate: false
-  xy: 0, 1485
-  size: 536, 495
-  orig: 536, 495
+  xy: 0, 0
+  size: 536, 454
+  orig: 536, 454
   offset: 0, 0
   index: 9
