@@ -30,7 +30,7 @@ public class GameScreen extends AbstractScreen {
     private Texture debugButtonUp;
     private Texture debugButtonDown;
     private long lastZombieTime;
-    private int spawnTime = 5000; //ms
+    private int spawnTime = 10000; //ms
     private float timeSinceCollision = 0;
     private boolean isCollision = false;
     private boolean isDebugMode = false;
