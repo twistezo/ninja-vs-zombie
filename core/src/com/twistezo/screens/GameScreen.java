@@ -26,6 +26,7 @@ public class GameScreen extends AbstractScreen {
     private Image backgroundImg;
     private long lastZombieTime;
     private int spawnTime = 5000; //ms
+    private float timeSinceCollision = 0;
     private boolean isCollision = false;
 
     public GameScreen(NinjaGame game) {
@@ -65,7 +66,6 @@ public class GameScreen extends AbstractScreen {
         player = new Player();
         player.setPosition(300, 50);
         player.setSize(player.getWidth(), player.getHeight());
-        player.setDebug(true);
         stage.addActor(player);
     }
 
@@ -78,6 +78,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        timeSinceCollision += delta;
         update();
         stage.draw();
         if (TimeUtils.millis() - lastZombieTime > spawnTime) {
@@ -87,6 +88,13 @@ public class GameScreen extends AbstractScreen {
             zombie.setDebug(true);
             stage.addActor(zombie);
         }
+        if(timeSinceCollision > 0.75f) {
+            checkCollision();
+            timeSinceCollision = 0;
+        }
+        zombieFollowPlayerX();
+        checkZombieDeath();
+        setDebugMode(true);
     }
 
     private void checkCollision() {
@@ -94,7 +102,9 @@ public class GameScreen extends AbstractScreen {
             if(player.getBounds().overlaps(zombieFemale.getBounds())){
                 zombieFemale.setInEnemyBounds(true);
                 player.setInEnemyBounds(true);
-                playerHealthBar.reducePlayerHealth();
+                if(!player.isAttacking()) {
+                    playerHealthBar.reducePlayerHealth();
+                }
                 if(player.isAttacking()) {
                     zombieFemale.decreaseHealth();
                 }
@@ -121,13 +131,20 @@ public class GameScreen extends AbstractScreen {
 
     private void update() {
         stage.act();
-        checkCollision();
-        zombieFollowPlayerX();
-        checkZombieDeath();
+
     }
 
     @Override
     public void resize(int width, int height){
         stage.getViewport().update(width,height);
+    }
+
+    private void setDebugMode(boolean value) {
+        player.setDebug(value);
+        player.setDebugMode(value);
+        for(ZombieFemale zombieFemale : femaleZombies) {
+            zombieFemale.setDebug(value);
+            zombieFemale.setDebugMode(value);
+        }
     }
 }
