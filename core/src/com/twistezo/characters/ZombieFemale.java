@@ -18,7 +18,7 @@ import com.twistezo.NinjaGame;
 public class ZombieFemale extends Actor {
     private final String ZOMBIE_FEMALE_MOVE_FILE = "zombie-female-run-right.atlas";
     private final String ZOMBIE_FEMALE_ATTACK_FILE = "zombie-female-attack.atlas";
-    private final float MOVEMENT_DURATION = 60f;
+    private final float MOVEMENT_DURATION = 10f;
     private final float FRAME_DURATION = 1/10f;
     private final float ZOMBIE_SCALE = 1/4f;
     private SpriteBatch spriteBatch;
@@ -29,20 +29,21 @@ public class ZombieFemale extends Actor {
     private TextureRegion textureRegion;
     private Rectangle bounds;
     private float stateTime = 0;
+    private float walkTargetX = 0;
+    private int health = 1000;
     private boolean isPlayerFlippedToLeft = false;
-    private boolean isInPlayerBounds = false;
-    private boolean moveToRight = false;
+    private boolean isInEnemyBounds = false;
+    private boolean isMovingToRight = false;
 
-    public ZombieFemale(boolean moveToRight) {
+    public ZombieFemale(boolean isMovingToRight) {
         this.setY(50);
-        if(moveToRight) {
-//            this.setX(-521*ZOMBIE_SCALE);
-            this.setX(0);
-        } else if (!moveToRight) {
-            this.setX(NinjaGame.SCREEN_WIDTH-100);
+        if(isMovingToRight) {
+            this.setX(-200);
+        } else if (!isMovingToRight) {
+            this.setX(NinjaGame.SCREEN_WIDTH+200);
         }
         this.setSize(this.getWidth(), this.getHeight());
-        this.moveToRight = moveToRight;
+        this.isMovingToRight = isMovingToRight;
         spriteBatch = new SpriteBatch();
         generateAnimations();
     }
@@ -66,16 +67,16 @@ public class ZombieFemale extends Actor {
         setZombieWidthAndHeight();
 
         /* Zombie walk */
-        if(!isInPlayerBounds){
-            walk(moveToRight);
+        if(!isInEnemyBounds){
+            walk(isMovingToRight);
         }
 
         /* Attack when zombie is in player bounds */
-        if(isInPlayerBounds) {
+        if(isInEnemyBounds) {
             clearActions();
-            if (moveToRight) {
+            if (isMovingToRight) {
                 textureRegion = animationAttack.getKeyFrame(stateTime,true);
-            } else if (!moveToRight) {
+            } else if (!isMovingToRight) {
                 isPlayerFlippedToLeft = true;
                 textureRegion = animationAttack.getKeyFrame(stateTime,true);
             }
@@ -83,17 +84,32 @@ public class ZombieFemale extends Actor {
         }
     }
 
+    /* Follow player */
     private void walk(boolean moveToRight) {
+        /* Walk to RIGHT */
         if (moveToRight) {
-            this.addAction(Actions.moveTo(NinjaGame.SCREEN_WIDTH-this.getWidth()/2, getY(), MOVEMENT_DURATION));
+            if(this.getX() < walkTargetX) {
+                isPlayerFlippedToLeft = false;
+                this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
+            } else if (this.getX() > walkTargetX){
+                isPlayerFlippedToLeft = true;
+                this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
+            }
+        /* Walk to LEFT */
         } else if (!moveToRight) {
-            isPlayerFlippedToLeft = true;
-            this.addAction(Actions.moveTo(-this.getWidth()/2, getY(), MOVEMENT_DURATION));
+            if(this.getX() > walkTargetX) {
+                isPlayerFlippedToLeft = true;
+                this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
+            } else if (this.getX() < walkTargetX){
+                isPlayerFlippedToLeft = false;
+                this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
+                isMovingToRight = true;
+            }
         }
     }
 
     public void setDirection(boolean moveToRight) {
-        this.moveToRight = moveToRight;
+        this.isMovingToRight = moveToRight;
     }
 
 
@@ -133,15 +149,27 @@ public class ZombieFemale extends Actor {
     }
 
     public Rectangle getBounds() {
-        bounds = new Rectangle((int)getX()+50, (int)getY(), (int)getWidth()-100, (int)getHeight());
+        bounds = new Rectangle((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
         return bounds;
     }
 
-    public boolean isInPlayerBounds() {
-        return isInPlayerBounds;
+    public boolean isInEnemyBounds() {
+        return isInEnemyBounds;
     }
 
-    public void setInPlayerBounds(boolean inPlayerBounds) {
-        isInPlayerBounds = inPlayerBounds;
+    public void setInEnemyBounds(boolean inEnemyBounds) {
+        isInEnemyBounds = inEnemyBounds;
+    }
+
+    public void setWalkTargetX(float x) {
+        this.walkTargetX = x;
+    }
+
+    public void decreaseHealth() {
+        this.health -= 25;
+    }
+
+    public int getHealth() {
+        return this.health;
     }
 }
