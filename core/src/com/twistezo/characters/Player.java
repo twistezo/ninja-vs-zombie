@@ -2,11 +2,14 @@ package com.twistezo.characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,6 +28,8 @@ public class Player extends Actor {
     private final float FRAME_DURATION = 1/10f;
     private final int MOVEMENT_STEP = 10;
     private final float PLAYER_SCALE = 1/3f;
+    private final int BOUNDS_SHIFT_IDLE = 10;
+    private final int BOUNDS_SHIFT_ATTACK = 40;
     private SpriteBatch spriteBatch;
     private TextureAtlas textureAtlasIdle;
     private TextureAtlas textureAtlasMove;
@@ -34,15 +39,18 @@ public class Player extends Actor {
     private Animation<TextureRegion> animationAttack;
     private TextureRegion textureRegion;
     private Rectangle bounds;
+    private ShapeRenderer shapeRenderer;
     private float stateTime = 0;
     private boolean isPlayerFlippedToLeft = false;
     private boolean isInEnemyBounds = false;
     private boolean moveToRight = false;
     private boolean isAttacking = false;
+    private boolean isDebugMode = false;
 
     public Player() {
         spriteBatch = new SpriteBatch();
         generateAnimations();
+        shapeRenderer = new ShapeRenderer();
     }
 
     private void generateAnimations() {
@@ -57,31 +65,28 @@ public class Player extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-
-        /* Make animationIdle depends on frames */
         stateTime += delta;
-        textureRegion = animationIdle.getKeyFrame(stateTime, true);
 
+        if(!isAttacking()) {
+        /* Idle animation */
+            textureRegion = animationIdle.getKeyFrame(stateTime, true);
         /* Set correct width and height for different sizes of textureRegions */
-        setPlayerWidthAndHeight();
-
-        if(isInEnemyBounds) {
-            //TODO bounds not working properly
-        }
+            setPlayerWidthAndHeight();
 
         /* Keyboard events */
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            textureRegion = animationMove.getKeyFrame(stateTime,true);
-            isPlayerFlippedToLeft = true;
-            setPlayerWidthAndHeight();
-            this.addAction(Actions.moveTo(getX() - MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            textureRegion = animationMove.getKeyFrame(stateTime,true);
-            isPlayerFlippedToLeft = false;
-            setPlayerWidthAndHeight();
-            moveToRight = true;
-            this.addAction(Actions.moveTo(getX() + MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                textureRegion = animationMove.getKeyFrame(stateTime, true);
+                isPlayerFlippedToLeft = true;
+                setPlayerWidthAndHeight();
+                this.addAction(Actions.moveTo(getX() - MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                textureRegion = animationMove.getKeyFrame(stateTime, true);
+                isPlayerFlippedToLeft = false;
+                setPlayerWidthAndHeight();
+                moveToRight = true;
+                this.addAction(Actions.moveTo(getX() + MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
+            }
         }
 
         setAttacking(false);
@@ -92,29 +97,33 @@ public class Player extends Actor {
             } else if (!moveToRight) {
                 isPlayerFlippedToLeft = true;
                 textureRegion = animationAttack.getKeyFrame(stateTime,true);
-
             }
-            animationAttack.isAnimationFinished(stateTime);
             setPlayerWidthAndHeight();
         }
 
         /* Mouse/Touch events */
+        mouseEvents();
+        /* Hold player in screen bounds */
+        holdPlayerInScreenBounds();
+         /* Updater getter for player X position */
+        getPlayerCurrentX();
+    }
+
+    private void mouseEvents() {
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             this.addAction(Actions.moveTo(touchPos.x - this.getWidth()/2, getY(), MOVEMENT_DURATION));
         }
+    }
 
-        /* Hold player in screen bounds */
+    private void holdPlayerInScreenBounds() {
         if (this.getX() < 0) {
             this.setPosition(0, 50);
         }
         if (this.getX() > NinjaGame.SCREEN_WIDTH - this.getWidth()) {
             this.setPosition(NinjaGame.SCREEN_WIDTH - this.getWidth(), getY());
         }
-
-         /* Updater setter for player X position */
-        getPlayerCurrentX();
     }
 
     @Override
@@ -135,6 +144,11 @@ public class Player extends Actor {
                     getScaleX(),getScaleY(),
                     getRotation());
         }
+        if(isDebugMode) {
+            batch.end();
+            drawDebugBounds();
+            batch.begin();
+        }
     }
 
     private void setPlayerWidthAndHeight() {
@@ -153,8 +167,26 @@ public class Player extends Actor {
     }
 
     public Rectangle getBounds() {
-        bounds = new Rectangle((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+        if(isAttacking()) {
+            bounds = new Rectangle((int)getX() + BOUNDS_SHIFT_ATTACK, (int)getY(), (int)getWidth() - 2 *BOUNDS_SHIFT_ATTACK, (int)getHeight());
+        } else {
+            bounds = new Rectangle((int)getX() + BOUNDS_SHIFT_IDLE, (int)getY(), (int)getWidth() - 2 * BOUNDS_SHIFT_IDLE, (int)getHeight());
+        }
         return bounds;
+    }
+
+    private void drawDebugBounds() {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(1, 0, 0, 0.5f)); // last argument is alpha channel
+        if(isAttacking()) {
+            shapeRenderer.rect((int)getX() + BOUNDS_SHIFT_ATTACK, (int)getY(), (int)getWidth() - 2 * BOUNDS_SHIFT_ATTACK, (int)getHeight());
+        } else {
+            shapeRenderer.rect((int)getX() + BOUNDS_SHIFT_IDLE, (int)getY(), (int)getWidth() - 2 * BOUNDS_SHIFT_IDLE, (int)getHeight());
+        }
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     public float getPlayerCurrentX() {
@@ -175,6 +207,10 @@ public class Player extends Actor {
 
     public void setAttacking(boolean attacking) {
         isAttacking = attacking;
+    }
+
+    public void setDebugMode(boolean debugMode) {
+        this.isDebugMode = debugMode;
     }
 }
 
