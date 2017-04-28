@@ -1,7 +1,9 @@
 package com.twistezo.screens;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.twistezo.NinjaGame;
 import com.twistezo.characters.Player;
@@ -24,10 +26,14 @@ public class GameScreen extends AbstractScreen {
     private PlayerHealthBar playerHealthBar;
     private Texture background;
     private Image backgroundImg;
+    private MyButton debugButton;
+    private Texture debugButtonUp;
+    private Texture debugButtonDown;
     private long lastZombieTime;
     private int spawnTime = 5000; //ms
     private float timeSinceCollision = 0;
     private boolean isCollision = false;
+    private boolean isDebugMode = false;
 
     public GameScreen(NinjaGame game) {
         super(game);
@@ -38,6 +44,7 @@ public class GameScreen extends AbstractScreen {
     protected void init() {
         initBackground();
         initFpsCounter();
+        initDebugButton();
         initPlayerHealthBar();
         initPlayer();
         femaleZombies = new ArrayList<>();
@@ -55,6 +62,25 @@ public class GameScreen extends AbstractScreen {
         fpsCounter.setPosition(5, 15);
         stage.addActor(fpsCounter);
     }
+
+    private void initDebugButton() {
+        debugButtonUp = new Texture("menu/debug_1.png");
+        debugButtonDown = new Texture("menu/debug_2.png");
+        debugButton = new MyButton(debugButtonUp, debugButtonDown);
+        debugButton.setPosition(NinjaGame.SCREEN_WIDTH - 200, NinjaGame.SCREEN_HEIGHT - 60);
+        stage.addActor(debugButton);
+    }
+
+    private void debugButtonListener() {
+        debugButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isDebugMode = !isDebugMode;
+                toggleDebugMode(isDebugMode);
+            }
+        });
+    }
+
 
     private void initPlayerHealthBar(){
         playerHealthBar = new PlayerHealthBar();
@@ -85,7 +111,6 @@ public class GameScreen extends AbstractScreen {
             spawnFemaleZombie();
         }
         for(ZombieFemale zombie : femaleZombies) {
-            zombie.setDebug(true);
             stage.addActor(zombie);
         }
         if(timeSinceCollision > 0.75f) {
@@ -94,7 +119,7 @@ public class GameScreen extends AbstractScreen {
         }
         zombieFollowPlayerX();
         checkZombieDeath();
-        setDebugMode(true);
+        debugButtonListener();
     }
 
     private void checkCollision() {
@@ -139,10 +164,10 @@ public class GameScreen extends AbstractScreen {
         stage.getViewport().update(width,height);
     }
 
-    private void setDebugMode(boolean value) {
+    private void toggleDebugMode(boolean value) {
         player.setDebug(value);
         player.setDebugMode(value);
-        for(ZombieFemale zombieFemale : femaleZombies) {
+        for (ZombieFemale zombieFemale : femaleZombies) {
             zombieFemale.setDebug(value);
             zombieFemale.setDebugMode(value);
         }
