@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.Random;
+
 /**
  * @author twistezo (25.04.2017)
  */
@@ -24,7 +26,9 @@ public class PlayerHealthBar extends Actor {
     }
 
     public void reducePlayerHealth(){
-        this.playerHealth -= 5;
+        Random rand = new Random();
+        int x = rand.nextInt(6);
+        this.playerHealth -= x;
     }
 
     public int getPlayerHealth() {
