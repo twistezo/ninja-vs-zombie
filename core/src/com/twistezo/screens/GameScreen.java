@@ -152,7 +152,8 @@ public class GameScreen extends AbstractScreen {
     private void checkZombieDeath() {
         for(int i=0; i<femaleZombies.size(); i++) {
             if(femaleZombies.get(i).getHealth() <= 0) {
-                femaleZombies.get(i).remove();
+                femaleZombies.get(i).setDeath(true);
+//                femaleZombies.get(i).remove();
                 femaleZombies.remove(i);
                 playerScoreCounter.addScore();
             }
