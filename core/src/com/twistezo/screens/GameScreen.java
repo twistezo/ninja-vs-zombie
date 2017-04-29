@@ -34,6 +34,7 @@ public class GameScreen extends AbstractScreen {
     private long lastZombieTime;
     private int spawnTime = 10000; //ms
     private float timeSinceCollision = 0;
+    private float timeSinceDeath = 0;
     private boolean isCollision = false;
     private boolean isDebugMode = false;
 
@@ -114,6 +115,7 @@ public class GameScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         timeSinceCollision += delta;
+        timeSinceDeath += delta;
         update();
         stage.draw();
         if (TimeUtils.millis() - lastZombieTime > spawnTime) {
@@ -128,6 +130,11 @@ public class GameScreen extends AbstractScreen {
         }
         zombieFollowPlayerX();
         checkZombieDeath();
+        if(timeSinceDeath > 2f) {
+            removeDeathZombie();
+            timeSinceDeath = 0;
+        }
+        checkPlayerDead();
         debugButtonListener();
     }
 
@@ -153,10 +160,23 @@ public class GameScreen extends AbstractScreen {
         for(int i=0; i<femaleZombies.size(); i++) {
             if(femaleZombies.get(i).getHealth() <= 0) {
                 femaleZombies.get(i).setDeath(true);
-//                femaleZombies.get(i).remove();
-                femaleZombies.remove(i);
-                playerScoreCounter.addScore();
             }
+        }
+    }
+
+    private void removeDeathZombie() {
+        for(int i=0; i<femaleZombies.size(); i++) {
+            if(femaleZombies.get(i).isReadyToRemove() && femaleZombies.get(i).isDeath()){
+                playerScoreCounter.addScore();
+                femaleZombies.get(i).remove();
+                femaleZombies.remove(i);
+            }
+        }
+    }
+
+    private void checkPlayerDead() {
+        if(playerHealthBar.getPlayerHealth() <= 0) {
+            player.setDead(true);
         }
     }
 
@@ -168,7 +188,6 @@ public class GameScreen extends AbstractScreen {
 
     private void update() {
         stage.act();
-
     }
 
     @Override
