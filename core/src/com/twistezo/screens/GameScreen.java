@@ -10,6 +10,7 @@ import com.twistezo.characters.Player;
 import com.twistezo.characters.ZombieFemale;
 import com.twistezo.utils.FpsCounter;
 import com.twistezo.utils.PlayerHealthBar;
+import com.twistezo.utils.PlayerScoreCounter;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,6 +25,7 @@ public class GameScreen extends AbstractScreen {
     private ArrayList<ZombieFemale> femaleZombies;
     private FpsCounter fpsCounter;
     private PlayerHealthBar playerHealthBar;
+    private PlayerScoreCounter playerScoreCounter;
     private Texture background;
     private Image backgroundImg;
     private MyButton debugButton;
@@ -46,6 +48,7 @@ public class GameScreen extends AbstractScreen {
         initFpsCounter();
         initDebugButton();
         initPlayerHealthBar();
+        initPlayerScoreCounter();
         initPlayer();
         femaleZombies = new ArrayList<>();
     }
@@ -86,6 +89,12 @@ public class GameScreen extends AbstractScreen {
         playerHealthBar = new PlayerHealthBar();
         playerHealthBar.setPosition(5, NinjaGame.SCREEN_HEIGHT-5);
         stage.addActor(playerHealthBar);
+    }
+
+    private void initPlayerScoreCounter() {
+        playerScoreCounter = new PlayerScoreCounter();
+        playerScoreCounter.setPosition(5, NinjaGame.SCREEN_HEIGHT - 25);
+        stage.addActor(playerScoreCounter);
     }
 
     private void initPlayer() {
@@ -141,9 +150,11 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void checkZombieDeath() {
-        for(ZombieFemale zombieFemale : femaleZombies) {
-            if(zombieFemale.getHealth() <= 0){
-                zombieFemale.remove();
+        for(int i=0; i<femaleZombies.size(); i++) {
+            if(femaleZombies.get(i).getHealth() <= 0) {
+                femaleZombies.get(i).remove();
+                femaleZombies.remove(i);
+                playerScoreCounter.addScore();
             }
         }
     }
