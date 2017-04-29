@@ -37,6 +37,7 @@ public class ZombieFemale extends Actor {
     private Rectangle bounds;
     private ShapeRenderer shapeRenderer;
     private float stateTime = 0;
+    private float stateDeadTime = 0;
     private float walkTargetX = 0;
     private int health = 100;
     private boolean isPlayerFlippedToLeft = false;
@@ -44,6 +45,7 @@ public class ZombieFemale extends Actor {
     private boolean isMovingToRight = false;
     private boolean isDebugMode = false;
     private boolean isDeath = false;
+    private boolean isReadyToRemove = false;
 
     public ZombieFemale(boolean isMovingToRight) {
         this.setY(50);
@@ -96,10 +98,12 @@ public class ZombieFemale extends Actor {
                 setZombieWidthAndHeight();
             }
         } else if (isDeath){
-            if(!animationDead.isAnimationFinished(stateTime)){
-                textureRegion = animationDead.getKeyFrame(stateTime);
+            stateDeadTime += delta;
+            if(!animationDead.isAnimationFinished(stateDeadTime)){
+                textureRegion = animationDead.getKeyFrame(stateDeadTime);
+            } else {
+                isReadyToRemove = true;
             }
-
         }
     }
 
@@ -213,5 +217,13 @@ public class ZombieFemale extends Actor {
 
     public void setDeath(boolean death) {
         isDeath = death;
+    }
+
+    public boolean isDeath() {
+        return isDeath;
+    }
+
+    public boolean isReadyToRemove() {
+        return isReadyToRemove;
     }
 }
