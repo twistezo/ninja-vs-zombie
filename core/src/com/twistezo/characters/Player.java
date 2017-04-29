@@ -24,6 +24,7 @@ public class Player extends Actor {
     private final String NINJA_IDLE_FILE = "ninja-idle.atlas";
     private final String NINJA_MOVE_FILE = "ninja-run-right.atlas";
     private final String NINJA_ATTACK_FILE = "ninja-attack.atlas";
+    private final String NINJA_DEAD_FILE = "ninja-dead.atlas";
     private final float MOVEMENT_DURATION = 1/10f;
     private final float FRAME_DURATION = 1/10f;
     private final int MOVEMENT_STEP = 10;
@@ -34,18 +35,23 @@ public class Player extends Actor {
     private TextureAtlas textureAtlasIdle;
     private TextureAtlas textureAtlasMove;
     private TextureAtlas textureAtlasAttack;
+    private TextureAtlas textureAtlasDead;
     private Animation<TextureRegion> animationIdle;
     private Animation<TextureRegion> animationMove;
     private Animation<TextureRegion> animationAttack;
+    private Animation<TextureRegion> animationDead;
     private TextureRegion textureRegion;
     private Rectangle bounds;
     private ShapeRenderer shapeRenderer;
     private float stateTime = 0;
+    private float stateAttackTime = 0;
+    private float stateDeadTime = 0;
     private boolean isPlayerFlippedToLeft = false;
     private boolean isInEnemyBounds = false;
     private boolean moveToRight = false;
     private boolean isAttacking = false;
     private boolean isDebugMode = false;
+    private boolean isDead = false;
 
     public Player() {
         spriteBatch = new SpriteBatch();
@@ -55,11 +61,13 @@ public class Player extends Actor {
 
     private void generateAnimations() {
         textureAtlasIdle = new TextureAtlas(Gdx.files.internal(NINJA_IDLE_FILE));
-        animationIdle = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasIdle.getRegions());
+        animationIdle = new Animation<>(FRAME_DURATION, textureAtlasIdle.getRegions());
         textureAtlasMove = new TextureAtlas(Gdx.files.internal(NINJA_MOVE_FILE));
-        animationMove = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasMove.getRegions());
+        animationMove = new Animation<>(FRAME_DURATION, textureAtlasMove.getRegions());
         textureAtlasAttack = new TextureAtlas(Gdx.files.internal(NINJA_ATTACK_FILE));
-        animationAttack = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasAttack.getRegions());
+        animationAttack = new Animation<>(FRAME_DURATION, textureAtlasAttack.getRegions());
+        textureAtlasDead = new TextureAtlas(Gdx.files.internal(NINJA_DEAD_FILE));
+        animationDead = new Animation<>(FRAME_DURATION, textureAtlasDead.getRegions());
     }
 
     @Override
@@ -67,13 +75,20 @@ public class Player extends Actor {
         super.act(delta);
         stateTime += delta;
 
-        if(!isAttacking()) {
-        /* Idle animation */
-            textureRegion = animationIdle.getKeyFrame(stateTime, true);
-        /* Set correct width and height for different sizes of textureRegions */
-            setPlayerWidthAndHeight();
+        if(isDead) {
+            stateDeadTime += delta;
+            if(!animationDead.isAnimationFinished(stateDeadTime)) {
+                textureRegion = animationDead.getKeyFrame(stateDeadTime);
+                setPlayerWidthAndHeight();
+            }
+        }
 
-        /* Keyboard events */
+        if(!isAttacking() && !isDead) {
+            /* Idle animation */
+            textureRegion = animationIdle.getKeyFrame(stateTime, true);
+            /* Set correct width and height for different sizes of textureRegions */
+            setPlayerWidthAndHeight();
+            /* Keyboard events */
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 textureRegion = animationMove.getKeyFrame(stateTime, true);
                 isPlayerFlippedToLeft = true;
@@ -93,10 +108,10 @@ public class Player extends Actor {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             setAttacking(true);
             if (moveToRight) {
-                textureRegion = animationAttack.getKeyFrame(stateTime,true);
+                textureRegion = animationAttack.getKeyFrame(stateTime, true);
             } else if (!moveToRight) {
                 isPlayerFlippedToLeft = true;
-                textureRegion = animationAttack.getKeyFrame(stateTime,true);
+                textureRegion = animationAttack.getKeyFrame(stateTime, true);
             }
             setPlayerWidthAndHeight();
         }
@@ -211,6 +226,10 @@ public class Player extends Actor {
 
     public void setDebugMode(boolean debugMode) {
         this.isDebugMode = debugMode;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 }
 
