@@ -44,14 +44,15 @@ public class Player extends Actor {
     private Rectangle bounds;
     private ShapeRenderer shapeRenderer;
     private float stateTime = 0;
-    private float stateAttackTime = 0;
     private float stateDeadTime = 0;
     private boolean isPlayerFlippedToLeft = false;
     private boolean isInEnemyBounds = false;
-    private boolean moveToRight = false;
+    private boolean isPlayerGoToRight = false;
     private boolean isAttacking = false;
     private boolean isDebugMode = false;
     private boolean isDead = false;
+    private boolean isMovingLeft = false;
+    private boolean isMovingRight = false;
 
     public Player() {
         spriteBatch = new SpriteBatch();
@@ -61,13 +62,54 @@ public class Player extends Actor {
 
     private void generateAnimations() {
         textureAtlasIdle = new TextureAtlas(Gdx.files.internal(NINJA_IDLE_FILE));
-        animationIdle = new Animation<>(FRAME_DURATION, textureAtlasIdle.getRegions());
+        animationIdle = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasIdle.getRegions());
         textureAtlasMove = new TextureAtlas(Gdx.files.internal(NINJA_MOVE_FILE));
-        animationMove = new Animation<>(FRAME_DURATION, textureAtlasMove.getRegions());
+        animationMove = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasMove.getRegions());
         textureAtlasAttack = new TextureAtlas(Gdx.files.internal(NINJA_ATTACK_FILE));
-        animationAttack = new Animation<>(FRAME_DURATION, textureAtlasAttack.getRegions());
+        animationAttack = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasAttack.getRegions());
         textureAtlasDead = new TextureAtlas(Gdx.files.internal(NINJA_DEAD_FILE));
-        animationDead = new Animation<>(FRAME_DURATION, textureAtlasDead.getRegions());
+        animationDead = new Animation<TextureRegion>(FRAME_DURATION, textureAtlasDead.getRegions());
+    }
+
+    private enum Movement {
+        IDLE, LEFT, RIGHT, ATTACK, DEAD
+    }
+
+    public void doMovement(String movement) {
+        switch(Movement.valueOf(movement)) {
+            case IDLE:
+                textureRegion = animationIdle.getKeyFrame(stateTime, true);
+                setPlayerWidthAndHeight();
+                break;
+            case LEFT:
+                textureRegion = animationMove.getKeyFrame(stateTime, true);
+                isPlayerFlippedToLeft = true;
+                setPlayerWidthAndHeight();
+                this.addAction(Actions.moveTo(getX() - MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
+                break;
+            case RIGHT:
+                textureRegion = animationMove.getKeyFrame(stateTime, true);
+                isPlayerFlippedToLeft = false;
+                setPlayerWidthAndHeight();
+                isPlayerGoToRight = true;
+                this.addAction(Actions.moveTo(getX() + MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
+                break;
+            case ATTACK:
+                if (isPlayerGoToRight) {
+                    textureRegion = animationAttack.getKeyFrame(stateTime, true);
+                } else  {
+                    isPlayerFlippedToLeft = true;
+                    textureRegion = animationAttack.getKeyFrame(stateTime, true);
+                }
+                setPlayerWidthAndHeight();
+                break;
+            case DEAD:
+                if(!animationDead.isAnimationFinished(stateDeadTime)) {
+                    textureRegion = animationDead.getKeyFrame(stateDeadTime);
+                    setPlayerWidthAndHeight();
+                }
+                break;
+        }
     }
 
     @Override
@@ -77,68 +119,24 @@ public class Player extends Actor {
 
         if(isDead) {
             stateDeadTime += delta;
-            if(!animationDead.isAnimationFinished(stateDeadTime)) {
-                textureRegion = animationDead.getKeyFrame(stateDeadTime);
-                setPlayerWidthAndHeight();
-            }
+            doMovement("DEAD");
         }
-
         if(!isAttacking() && !isDead) {
-            /* Idle animation */
-            textureRegion = animationIdle.getKeyFrame(stateTime, true);
-            /* Set correct width and height for different sizes of textureRegions */
-            setPlayerWidthAndHeight();
-            /* Keyboard events */
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                textureRegion = animationMove.getKeyFrame(stateTime, true);
-                isPlayerFlippedToLeft = true;
-                setPlayerWidthAndHeight();
-                this.addAction(Actions.moveTo(getX() - MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
+            doMovement("IDLE");
+            if (isMovingLeft || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                doMovement("LEFT");
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                textureRegion = animationMove.getKeyFrame(stateTime, true);
-                isPlayerFlippedToLeft = false;
-                setPlayerWidthAndHeight();
-                moveToRight = true;
-                this.addAction(Actions.moveTo(getX() + MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
+            if (isMovingRight || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                doMovement("RIGHT");
             }
         }
-
-        setAttacking(false);
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            setAttacking(true);
-            if (moveToRight) {
-                textureRegion = animationAttack.getKeyFrame(stateTime, true);
-            } else if (!moveToRight) {
-                isPlayerFlippedToLeft = true;
-                textureRegion = animationAttack.getKeyFrame(stateTime, true);
-            }
-            setPlayerWidthAndHeight();
+        if (isAttacking() || Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            doMovement("ATTACK");
         }
 
-        /* Mouse/Touch events */
-        mouseEvents();
-        /* Hold player in screen bounds */
+//        mouseEvents();
         holdPlayerInScreenBounds();
-         /* Updater getter for player X position */
         getPlayerCurrentX();
-    }
-
-    private void mouseEvents() {
-        if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            this.addAction(Actions.moveTo(touchPos.x - this.getWidth()/2, getY(), MOVEMENT_DURATION));
-        }
-    }
-
-    private void holdPlayerInScreenBounds() {
-        if (this.getX() < 0) {
-            this.setPosition(0, 50);
-        }
-        if (this.getX() > NinjaGame.SCREEN_WIDTH - this.getWidth()) {
-            this.setPosition(NinjaGame.SCREEN_WIDTH - this.getWidth(), getY());
-        }
     }
 
     @Override
@@ -166,19 +164,27 @@ public class Player extends Actor {
         }
     }
 
+    private void mouseEvents() {
+        if (Gdx.input.isTouched()) {
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            this.addAction(Actions.moveTo(touchPos.x - this.getWidth()/2, getY(), MOVEMENT_DURATION));
+        }
+    }
+
+    private void holdPlayerInScreenBounds() {
+        if (this.getX() < 0) {
+            this.setPosition(0, 50);
+        }
+        if (this.getX() > NinjaGame.SCREEN_WIDTH - this.getWidth()) {
+            this.setPosition(NinjaGame.SCREEN_WIDTH - this.getWidth(), getY());
+        }
+    }
+
+    /* Set correct width and height for different sizes of textureRegions */
     private void setPlayerWidthAndHeight() {
         setWidth(textureRegion.getRegionWidth() * PLAYER_SCALE);
         setHeight(textureRegion.getRegionHeight() * PLAYER_SCALE);
-    }
-
-    @Override
-    public void setWidth(float width) {
-        super.setWidth(width);
-    }
-
-    @Override
-    public void setHeight(float height) {
-        super.setHeight(height);
     }
 
     public Rectangle getBounds() {
@@ -204,24 +210,30 @@ public class Player extends Actor {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    public float getPlayerCurrentX() {
-        return this.getX();
+    @Override
+    public void setWidth(float width) {
+        super.setWidth(width);
     }
 
-    public boolean isInEnemyBounds() {
-        return isInEnemyBounds;
+    @Override
+    public void setHeight(float height) {
+        super.setHeight(height);
+    }
+
+    public float getPlayerCurrentX() {
+        return this.getX();
     }
 
     public void setInEnemyBounds(boolean inEnemyBounds) {
         isInEnemyBounds = inEnemyBounds;
     }
 
-    public boolean isAttacking() {
-        return isAttacking;
-    }
-
     public void setAttacking(boolean attacking) {
         isAttacking = attacking;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
     }
 
     public void setDebugMode(boolean debugMode) {
@@ -230,6 +242,14 @@ public class Player extends Actor {
 
     public void setDead(boolean dead) {
         isDead = dead;
+    }
+
+    public void setMovingLeft(boolean movingLeft) {
+        isMovingLeft = movingLeft;
+    }
+
+    public void setMovingRight(boolean movingRight) {
+        isMovingRight = movingRight;
     }
 }
 
