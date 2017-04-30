@@ -1,24 +1,26 @@
 # ninja-vs-zombie
 Android/Desktop game made with libGDX
 
-Desktop:
-
-`to run use run-desktop-mode.bat file`
-
 Android:
 * create local.properties file with your android SKD path
+
 `sdk.dir=C\:\\Users\\*YOUR_USERNAME*\\AppData\\Local\\Android\\Sdk`
 * package .apk
+
 `use android-package-apk.bat`
 * generated .apk file path
+
 `.../android/build/outputs/apk`
 
 Desktop:
 * package .jar
+
 `use desktop-package-jar.bat`
 * generated .jar file path
+
 `desktop/build/libs/`
 * run
+
 `use desktop-run.bat`
 
 Features:
