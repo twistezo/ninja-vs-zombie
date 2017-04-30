@@ -1,0 +1,89 @@
+zombie-male-dead.png
+size: 3774, 1052
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Dead (1)
+  rotate: false
+  xy: 0, 0
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (2)
+  rotate: false
+  xy: 629, 0
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (3)
+  rotate: false
+  xy: 1258, 0
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (4)
+  rotate: false
+  xy: 1887, 0
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (5)
+  rotate: false
+  xy: 2516, 0
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (6)
+  rotate: false
+  xy: 3145, 0
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (7)
+  rotate: false
+  xy: 0, 526
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (8)
+  rotate: false
+  xy: 629, 526
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (9)
+  rotate: false
+  xy: 1258, 526
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (10)
+  rotate: false
+  xy: 1887, 526
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (11)
+  rotate: false
+  xy: 2516, 526
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1
+Dead (12)
+  rotate: false
+  xy: 3145, 526
+  size: 629, 526
+  orig: 629, 526
+  offset: 0, 0
+  index: -1

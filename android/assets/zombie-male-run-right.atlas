@@ -1,0 +1,75 @@
+zombie-male-run-right.png
+size: 1720, 1557
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Walk (1)
+  rotate: false
+  xy: 0, 0
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (2)
+  rotate: false
+  xy: 430, 0
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (3)
+  rotate: false
+  xy: 860, 0
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (4)
+  rotate: false
+  xy: 1290, 0
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (5)
+  rotate: false
+  xy: 0, 519
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (6)
+  rotate: false
+  xy: 430, 519
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (7)
+  rotate: false
+  xy: 860, 519
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (8)
+  rotate: false
+  xy: 1290, 519
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (9)
+  rotate: false
+  xy: 0, 1038
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
+Walk (10)
+  rotate: false
+  xy: 430, 1038
+  size: 430, 519
+  orig: 430, 519
+  offset: 0, 0
+  index: -1
