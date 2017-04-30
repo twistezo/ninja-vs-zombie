@@ -28,9 +28,15 @@ public class GameScreen extends AbstractScreen {
     private PlayerScoreCounter playerScoreCounter;
     private Texture background;
     private Image backgroundImg;
-    private MyButton debugButton;
-    private Texture debugButtonUp;
-    private Texture debugButtonDown;
+    private MyButton buttonDebug;
+    private MyButton buttonLeft;
+    private MyButton buttonRight;
+    private MyButton buttonAttack;
+    private Texture buttonDebugTextureUp;
+    private Texture buttonDebugTextureDown;
+    private Texture buttonLeftTexture;
+    private Texture buttonRightTexture;
+    private Texture buttonAttackTexture;
     private long lastZombieTime;
     private int spawnTime = 10000; //ms
     private float timeSinceCollision = 0;
@@ -48,9 +54,11 @@ public class GameScreen extends AbstractScreen {
         initBackground();
         initFpsCounter();
         initDebugButton();
+        initGameButtons();
         initPlayerHealthBar();
         initPlayerScoreCounter();
         initPlayer();
+        initButtonsListeners();
         femaleZombies = new ArrayList<>();
     }
 
@@ -68,23 +76,86 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void initDebugButton() {
-        debugButtonUp = new Texture("menu/debug_1.png");
-        debugButtonDown = new Texture("menu/debug_2.png");
-        debugButton = new MyButton(debugButtonUp, debugButtonDown);
-        debugButton.setPosition(NinjaGame.SCREEN_WIDTH - 200, NinjaGame.SCREEN_HEIGHT - 60);
-        stage.addActor(debugButton);
+        buttonDebugTextureUp = new Texture("menu/debug_1.png");
+        buttonDebugTextureDown = new Texture("menu/debug_2.png");
+        buttonDebug = new MyButton(buttonDebugTextureUp, buttonDebugTextureDown);
+        buttonDebug.setPosition(NinjaGame.SCREEN_WIDTH - 200, NinjaGame.SCREEN_HEIGHT - 60);
+        stage.addActor(buttonDebug);
     }
 
-    private void debugButtonListener() {
-        debugButton.addListener(new ClickListener() {
+    private void initGameButtons() {
+        final int OFFSET = 25;
+        buttonLeftTexture = new Texture("button-left.png");
+        buttonRightTexture = new Texture("button-right.png");
+        buttonAttackTexture = new Texture("button-action.png");
+        buttonLeft = new MyButton(buttonLeftTexture, buttonLeftTexture);
+        buttonRight = new MyButton(buttonRightTexture, buttonRightTexture);
+        buttonAttack = new MyButton(buttonAttackTexture, buttonAttackTexture);
+        buttonLeft.setPosition(NinjaGame.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET - 10 - buttonLeft.getWidth(), OFFSET);
+        buttonRight.setPosition(NinjaGame.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET, OFFSET);
+        buttonAttack.setPosition(OFFSET, OFFSET);
+        stage.addActor(buttonLeft);
+        stage.addActor(buttonRight);
+        stage.addActor(buttonAttack);
+    }
+
+    private void initButtonsListeners() {
+        buttonDebug.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 isDebugMode = !isDebugMode;
                 toggleDebugMode(isDebugMode);
             }
         });
-    }
 
+        buttonLeft.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                player.setMovingLeft(true);
+                player.doMovement("LEFT");
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                player.setMovingLeft(false);
+                player.doMovement("IDLE");
+            }
+        });
+
+        buttonRight.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                player.setMovingRight(true);
+                player.doMovement("RIGHT");
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                player.setMovingRight(false);
+                player.doMovement("IDLE");
+            }
+        });
+
+        buttonAttack.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                player.setAttacking(true);
+                player.doMovement("ATTACK");
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                player.setAttacking(false);
+                player.doMovement("IDLE");
+            }
+        });
+    }
 
     private void initPlayerHealthBar(){
         playerHealthBar = new PlayerHealthBar();
@@ -135,7 +206,7 @@ public class GameScreen extends AbstractScreen {
             timeSinceDeath = 0;
         }
         checkPlayerDead();
-        debugButtonListener();
+
     }
 
     private void checkCollision() {
