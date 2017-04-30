@@ -1,7 +1,7 @@
 package com.twistezo;
 
 import com.badlogic.gdx.Game;
-import com.twistezo.screens.MenuScreen;
+import com.twistezo.screens.GameScreen;
 
 /**
  * @author twistezo (23.04.2017)
@@ -15,7 +15,7 @@ public class NinjaGame extends Game{
 
     @Override
     public void create() {
-        this.setScreen(new MenuScreen(this));
+        this.setScreen(new GameScreen(this));
     }
 
     public boolean isPaused() {
