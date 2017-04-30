@@ -28,13 +28,15 @@ public class PlayerHealthBar extends Actor {
     public void reducePlayerHealth(){
         Random rand = new Random();
         int x = rand.nextInt(6);
-        if(playerHealth > 0) {
-            this.playerHealth -= x;
-        }
+        this.playerHealth -= x;
     }
 
     public int getPlayerHealth() {
         return playerHealth;
+    }
+
+    public void setHealth(int health) {
+        this.playerHealth = health;
     }
 
 }
