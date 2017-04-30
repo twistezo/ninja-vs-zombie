@@ -11,7 +11,7 @@ To run:
             <img src="http://i.imgur.com/vTVokMw.png" width="500">
         </td>
         <td>
-            <img src="http://i.imgur.com/MwhJ86T.png" width="500">
+            <img src="http://i.imgur.com/0P37rBC.png" width="500">
         </td>
     </tr>
 </table>
