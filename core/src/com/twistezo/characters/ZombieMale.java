@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * @author twistezo (30.04.2017)
  */
 
-public class ZombieFemale extends Zombie {
-    private final String ZOMBIE_MOVE_FILE = "zombie-female-run-right.atlas";
-    private final String ZOMBIE_ATTACK_FILE = "zombie-female-attack.atlas";
-    private final String ZOMBIE_DEAD_FILE = "zombie-female-dead.atlas";
+public class ZombieMale extends Zombie {
+    private final String ZOMBIE_MOVE_FILE = "zombie-male-run-right.atlas";
+    private final String ZOMBIE_ATTACK_FILE = "zombie-male-attack.atlas";
+    private final String ZOMBIE_DEAD_FILE = "zombie-male-dead.atlas";
 
-    public ZombieFemale(boolean isMovingToRight) {
+    public ZombieMale(boolean isMovingToRight) {
         super(isMovingToRight);
     }
 
