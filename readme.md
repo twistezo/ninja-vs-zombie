@@ -8,6 +8,7 @@ Android:
 `use android-package-apk.bat`
 * generated .apk file path
 `.../android/build/outputs/apk`
+
 Desktop:
 * package .jar
 `use desktop-package-jar.bat`
