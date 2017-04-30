@@ -45,6 +45,7 @@ public class Player extends Actor {
     private ShapeRenderer shapeRenderer;
     private float stateTime = 0;
     private float stateDeadTime = 0;
+    private float stateAttackTime = 0;
     private boolean isPlayerFlippedToLeft = false;
     private boolean isInEnemyBounds = false;
     private boolean isPlayerGoRight = false;
@@ -53,8 +54,10 @@ public class Player extends Actor {
     private boolean isDead = false;
     private boolean isMovingLeft = false;
     private boolean isMovingRight = false;
+    private boolean isTest = false;
 
-    public Player() {
+    public Player(float positionX, float positionY) {
+        this.setPosition(positionX, positionY);
         spriteBatch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         generateAnimations();
@@ -96,10 +99,14 @@ public class Player extends Actor {
                 break;
             case ATTACK:
                 if (isPlayerGoRight) {
-                    textureRegion = animationAttack.getKeyFrame(stateTime, true);
+                    textureRegion = animationAttack.getKeyFrame(stateAttackTime);
                 } else  {
                     isPlayerFlippedToLeft = true;
-                    textureRegion = animationAttack.getKeyFrame(stateTime, true);
+                    textureRegion = animationAttack.getKeyFrame(stateAttackTime);
+                }
+                if(animationAttack.isAnimationFinished(stateAttackTime)) {
+                    isAttacking = false;
+                    stateAttackTime = 0;
                 }
                 setPlayerWidthAndHeight();
                 break;
@@ -116,7 +123,6 @@ public class Player extends Actor {
     public void act(float delta) {
         super.act(delta);
         stateTime += delta;
-        isAttacking = false;
 
         if(isDead) {
             stateDeadTime += delta;
@@ -132,12 +138,17 @@ public class Player extends Actor {
                     doMovement("RIGHT");
                 }
             }
-            if (isAttacking || Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
                 isAttacking = true;
+            }
+            if(isAttacking) {
+                stateAttackTime += delta;
                 doMovement("ATTACK");
             }
         }
-//        changePlayerPositionByTouch();
+        if(isDebugMode) {
+            changePlayerPositionByTouch();
+        }
         holdPlayerInScreenBounds();
         getPlayerCurrentX();
     }
@@ -245,6 +256,10 @@ public class Player extends Actor {
 
     public void setDead(boolean dead) {
         isDead = dead;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 
     public void setMovingLeft(boolean movingLeft) {
