@@ -47,7 +47,7 @@ public class Player extends Actor {
     private float stateDeadTime = 0;
     private boolean isPlayerFlippedToLeft = false;
     private boolean isInEnemyBounds = false;
-    private boolean isPlayerGoToRight = false;
+    private boolean isPlayerGoRight = false;
     private boolean isAttacking = false;
     private boolean isDebugMode = false;
     private boolean isDead = false;
@@ -56,8 +56,8 @@ public class Player extends Actor {
 
     public Player() {
         spriteBatch = new SpriteBatch();
-        generateAnimations();
         shapeRenderer = new ShapeRenderer();
+        generateAnimations();
     }
 
     private void generateAnimations() {
@@ -91,11 +91,11 @@ public class Player extends Actor {
                 textureRegion = animationMove.getKeyFrame(stateTime, true);
                 isPlayerFlippedToLeft = false;
                 setPlayerWidthAndHeight();
-                isPlayerGoToRight = true;
+                isPlayerGoRight = true;
                 this.addAction(Actions.moveTo(getX() + MOVEMENT_STEP, getY(), MOVEMENT_DURATION));
                 break;
             case ATTACK:
-                if (isPlayerGoToRight) {
+                if (isPlayerGoRight) {
                     textureRegion = animationAttack.getKeyFrame(stateTime, true);
                 } else  {
                     isPlayerFlippedToLeft = true;
@@ -116,25 +116,28 @@ public class Player extends Actor {
     public void act(float delta) {
         super.act(delta);
         stateTime += delta;
+        isAttacking = false;
 
         if(isDead) {
             stateDeadTime += delta;
             doMovement("DEAD");
         }
-        if(!isAttacking() && !isDead) {
-            doMovement("IDLE");
-            if (isMovingLeft || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                doMovement("LEFT");
+        if(!isDead) {
+            if(!isAttacking) {
+                doMovement("IDLE");
+                if (isMovingLeft || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                    doMovement("LEFT");
+                }
+                if (isMovingRight || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                    doMovement("RIGHT");
+                }
             }
-            if (isMovingRight || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                doMovement("RIGHT");
+            if (isAttacking || Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                isAttacking = true;
+                doMovement("ATTACK");
             }
         }
-        if (isAttacking() || Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            doMovement("ATTACK");
-        }
-
-//        mouseEvents();
+//        changePlayerPositionByTouch();
         holdPlayerInScreenBounds();
         getPlayerCurrentX();
     }
@@ -164,7 +167,7 @@ public class Player extends Actor {
         }
     }
 
-    private void mouseEvents() {
+    private void changePlayerPositionByTouch() {
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -189,7 +192,7 @@ public class Player extends Actor {
 
     public Rectangle getBounds() {
         if(isAttacking()) {
-            bounds = new Rectangle((int)getX() + BOUNDS_SHIFT_ATTACK, (int)getY(), (int)getWidth() - 2 *BOUNDS_SHIFT_ATTACK, (int)getHeight());
+            bounds = new Rectangle((int)getX() + BOUNDS_SHIFT_ATTACK, (int)getY(), (int)getWidth() - 2 * BOUNDS_SHIFT_ATTACK, (int)getHeight());
         } else {
             bounds = new Rectangle((int)getX() + BOUNDS_SHIFT_IDLE, (int)getY(), (int)getWidth() - 2 * BOUNDS_SHIFT_IDLE, (int)getHeight());
         }
