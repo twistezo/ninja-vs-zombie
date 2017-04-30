@@ -19,7 +19,7 @@ import com.twistezo.NinjaGame;
  */
 
 public abstract class Zombie extends Actor {
-    private final float MOVEMENT_DURATION = 10f;
+    private final float MOVEMENT_DURATION = 60f;
     protected final float FRAME_DURATION = 1/10f;
     private final float ZOMBIE_SCALE = 1/4f;
     private final int BOUNDS_SHIFT = 20;
