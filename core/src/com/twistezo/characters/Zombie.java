@@ -59,9 +59,9 @@ public abstract class Zombie extends Actor {
     private void initZombieStartPosition() {
         this.setY(50);
         if(isZombieGoRight) {
-            this.setX(-200);
+            this.setX(-100);
         } else {
-            this.setX(NinjaGame.SCREEN_WIDTH+200);
+            this.setX(NinjaGame.SCREEN_WIDTH);
         }
     }
 
