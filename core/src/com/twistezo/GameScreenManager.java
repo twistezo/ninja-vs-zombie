@@ -10,18 +10,17 @@ import com.twistezo.screens.MenuScreen;
  * @author twistezo (23.04.2017)
  */
 
-public class NinjaGame extends Game{
+public class GameScreenManager extends Game{
     public final static int SCREEN_WIDTH = 800;
     public final static int SCREEN_HEIGHT = 480;
     public final static String GAME_NAME = "ninja vs zombie";
     private static Game game = null;
     private static Screen menuScreen;
-    private static Screen gameScreen;
+    public static Screen gameScreen;
     private static Screen highscoreScreen;
 
-    @Override
     public void create() {
-        NinjaGame.game = this;
+        GameScreenManager.game = this;
         menuScreen = new MenuScreen(this);
         gameScreen = new GameScreen(this);
         highscoreScreen = new HighScoreScreen(this);
@@ -38,5 +37,13 @@ public class NinjaGame extends Game{
 
     public static void setHighscoreScreen() {
         game.setScreen(highscoreScreen);
+    }
+
+    public static void createNewGameScreen() {
+        gameScreen = new GameScreen((GameScreenManager) GameScreenManager.game);
+    }
+    public static void disposeAndDeleteGameScreen() {
+        gameScreen.dispose();
+        gameScreen = null;
     }
 }
