@@ -29,6 +29,8 @@ Features:
 * Killed zombies counter
 * FPS counter
 * Debug mode (actor bounds, drag'n'drop player)
+* Game over behaviour
+* Highscores screen
 
 <table>
     <tr>
