@@ -1,8 +1,12 @@
 package com.twistezo.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.twistezo.NinjaGame;
@@ -41,6 +45,7 @@ public class GameScreen extends AbstractScreen {
     private Texture buttonLeftTexture;
     private Texture buttonRightTexture;
     private Texture buttonAttackTexture;
+    private TextField txtUsername;
     private Random random;
     private long lastZombieTime;
     private float timeSinceCollision = 0;
@@ -63,6 +68,7 @@ public class GameScreen extends AbstractScreen {
         initPlayerScoreCounter();
         initPlayer();
         initButtonsListeners();
+        initTextField();
         zombies = new ArrayList<>();
         random = new Random();
     }
@@ -104,6 +110,30 @@ public class GameScreen extends AbstractScreen {
         stage.addActor(buttonAttack);
     }
 
+    private void initTextField() {
+        Skin uiSkin = new Skin(Gdx.files.internal("default skin/uiskin.json"));
+        txtUsername = new TextField("", uiSkin);
+        txtUsername.setMessageText("Enter your name..");
+        txtUsername.setPosition(NinjaGame.SCREEN_WIDTH/2, NinjaGame.SCREEN_HEIGHT/2);
+        stage.addActor(txtUsername);
+    }
+
+    private void textFieldActions() {
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            String test = txtUsername.getText();
+//            new HighScoreScreen(game).addNewScore(test, 12);
+            System.out.println(test);
+//            game.setScreen(new HighScoreScreen(game));
+            NinjaGame.setHighscoreScreen();
+        }
+    }
+
+    private void backKeyListener() {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            NinjaGame.setMenuScreen();
+        }
+    }
+
     private void initButtonsListeners() {
         buttonDebug.addListener(new ClickListener() {
             @Override
@@ -115,38 +145,48 @@ public class GameScreen extends AbstractScreen {
         buttonLeft.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                player.setMovingLeft(true);
-                player.doMovement("LEFT");
+                if(!player.isDead()) {
+                    player.setMovingLeft(true);
+                    player.doMovement("LEFT");
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                player.setMovingLeft(false);
-                player.doMovement("IDLE");
+                if(!player.isDead()) {
+                    player.setMovingLeft(false);
+                    player.doMovement("IDLE");
+                }
             }
         });
         buttonRight.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                player.setMovingRight(true);
-                player.doMovement("RIGHT");
+                if(!player.isDead()) {
+                    player.setMovingRight(true);
+                    player.doMovement("RIGHT");
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                player.setMovingRight(false);
-                player.doMovement("IDLE");
+                if(!player.isDead()) {
+                    player.setMovingRight(false);
+                    player.doMovement("IDLE");
+                }
             }
         });
         buttonAttack.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                player.setAttacking(true);
-                player.doMovement("ATTACK");
+                if(!player.isDead()) {
+                    player.setAttacking(true);
+                    player.doMovement("ATTACK");
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -210,6 +250,8 @@ public class GameScreen extends AbstractScreen {
         }
         checkPlayerDeath();
         moveActorsToFront();
+        textFieldActions();
+        backKeyListener();
     }
 
     private void moveActorsToFront() {

@@ -27,7 +27,6 @@ public class MenuScreen extends AbstractScreen {
     private Texture exitButtonUp;
     private Texture exitButtonDown;
 
-
     public MenuScreen(NinjaGame game) {
         super(game);
         init();
@@ -38,9 +37,7 @@ public class MenuScreen extends AbstractScreen {
         initBackground();
         initButtons();
         initTable();
-        initButtonsAction();
     }
-
 
     private void initBackground() {
         background = new Texture("menu/background.png");
@@ -61,30 +58,6 @@ public class MenuScreen extends AbstractScreen {
         exitButton = new MyButton(exitButtonUp, exitButtonDown);
     }
 
-    private void initButtonsAction() {
-        playButton.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                game.setScreen(new GameScreen(game));
-            }
-        });
-        highscoreButton.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                game.setScreen(new HighScoreScreen(game));
-            }
-        });
-        exitButton.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                Gdx.app.exit();
-            }
-        });
-    }
-
     private void initTable() {
         int tableSpace = 30;
         Table table = new Table();
@@ -98,6 +71,30 @@ public class MenuScreen extends AbstractScreen {
         stage.addActor(table);
     }
 
+    private void buttonsListeners() {
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                NinjaGame.setGameScreen();
+            }
+        });
+        highscoreButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                NinjaGame.setHighscoreScreen();
+            }
+        });
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                Gdx.app.exit();
+            }
+        });
+    }
+
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -105,10 +102,10 @@ public class MenuScreen extends AbstractScreen {
         spriteBatch.begin();
         stage.draw();
         spriteBatch.end();
+        buttonsListeners();
     }
 
     private void update() {
         stage.act();
     }
-
 }

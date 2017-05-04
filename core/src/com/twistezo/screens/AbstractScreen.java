@@ -19,6 +19,10 @@ public abstract class AbstractScreen implements Screen {
     protected Stage stage;
     private OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
+    private GameScreen gameScreen;
+    private MenuScreen menuScreen;
+    private HighScoreScreen highScoreScreen;
+
 
     public AbstractScreen(NinjaGame game) {
         this.game = game;
@@ -27,8 +31,6 @@ public abstract class AbstractScreen implements Screen {
         stage = new Stage(new StretchViewport(NinjaGame.SCREEN_WIDTH, NinjaGame.SCREEN_HEIGHT, camera));
         /* Batch for sprites */
         spriteBatch = new SpriteBatch();
-        /* Stage takes user inputs */
-        Gdx.input.setInputProcessor(stage);
         init();
     }
 
@@ -52,6 +54,8 @@ public abstract class AbstractScreen implements Screen {
         clearScreen();
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
+        /* Stage takes user inputs */
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -64,12 +68,10 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void pause() {
-        game.setPaused(true);
     }
 
     @Override
     public void resume() {
-        game.setPaused(false);
     }
 
     @Override

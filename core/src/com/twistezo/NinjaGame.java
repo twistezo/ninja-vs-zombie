@@ -1,6 +1,9 @@
 package com.twistezo;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
+import com.twistezo.screens.GameScreen;
+import com.twistezo.screens.HighScoreScreen;
 import com.twistezo.screens.MenuScreen;
 
 /**
@@ -11,18 +14,29 @@ public class NinjaGame extends Game{
     public final static int SCREEN_WIDTH = 800;
     public final static int SCREEN_HEIGHT = 480;
     public final static String GAME_NAME = "ninja vs zombie";
-    private boolean paused;
+    private static Game game = null;
+    private static Screen menuScreen;
+    private static Screen gameScreen;
+    private static Screen highscoreScreen;
 
     @Override
     public void create() {
-        this.setScreen(new MenuScreen(this));
+        NinjaGame.game = this;
+        menuScreen = new MenuScreen(this);
+        gameScreen = new GameScreen(this);
+        highscoreScreen = new HighScoreScreen(this);
+        setMenuScreen();
     }
 
-    public boolean isPaused() {
-        return paused;
+    public static void setMenuScreen() {
+        game.setScreen(menuScreen);
     }
 
-    public void setPaused(boolean paused) {
-        this.paused = paused;
+    public static void setGameScreen() {
+        game.setScreen(gameScreen);
+    }
+
+    public static void setHighscoreScreen() {
+        game.setScreen(highscoreScreen);
     }
 }
