@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.twistezo.NinjaGame;
+import com.twistezo.GameScreenManager;
 
 /**
  * @author twistezo (23.04.2017)
@@ -15,7 +15,7 @@ import com.twistezo.NinjaGame;
  */
 
 public abstract class AbstractScreen implements Screen {
-    protected NinjaGame game;
+    protected GameScreenManager game;
     protected Stage stage;
     private OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
@@ -24,11 +24,11 @@ public abstract class AbstractScreen implements Screen {
     private HighScoreScreen highScoreScreen;
 
 
-    public AbstractScreen(NinjaGame game) {
+    public AbstractScreen(GameScreenManager game) {
         this.game = game;
         createCamera();
         /* Stage for actors */
-        stage = new Stage(new StretchViewport(NinjaGame.SCREEN_WIDTH, NinjaGame.SCREEN_HEIGHT, camera));
+        stage = new Stage(new StretchViewport(GameScreenManager.SCREEN_WIDTH, GameScreenManager.SCREEN_HEIGHT, camera));
         /* Batch for sprites */
         spriteBatch = new SpriteBatch();
         init();
@@ -39,7 +39,7 @@ public abstract class AbstractScreen implements Screen {
     private void createCamera() {
         /* Orthographic means like in CAD drawings */
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, NinjaGame.SCREEN_WIDTH, NinjaGame.SCREEN_HEIGHT);
+        camera.setToOrtho(false, GameScreenManager.SCREEN_WIDTH, GameScreenManager.SCREEN_HEIGHT);
         camera.update();
     }
 
