@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.twistezo.NinjaGame;
+import com.twistezo.GameScreenManager;
 import com.twistezo.characters.Player;
 import com.twistezo.characters.Zombie;
 import com.twistezo.characters.ZombieFemale;
@@ -36,6 +36,8 @@ public class GameScreen extends AbstractScreen {
     private PlayerScoreCounter playerScoreCounter;
     private Texture background;
     private Image backgroundImg;
+    private Texture gameOverBackground;
+    private Image gameOverBackgroundImg;
     private MyButton buttonDebug;
     private MyButton buttonLeft;
     private MyButton buttonRight;
@@ -45,7 +47,7 @@ public class GameScreen extends AbstractScreen {
     private Texture buttonLeftTexture;
     private Texture buttonRightTexture;
     private Texture buttonAttackTexture;
-    private TextField txtUsername;
+    private TextField gameOverTextField;
     private Random random;
     private long lastZombieTime;
     private float timeSinceCollision = 0;
@@ -53,7 +55,7 @@ public class GameScreen extends AbstractScreen {
     private boolean isCollision = false;
     private boolean isDebugMode = false;
 
-    public GameScreen(NinjaGame game) {
+    public GameScreen(GameScreenManager game) {
         super(game);
         init();
     }
@@ -67,8 +69,8 @@ public class GameScreen extends AbstractScreen {
         initPlayerHealthBar();
         initPlayerScoreCounter();
         initPlayer();
-        initButtonsListeners();
-        initTextField();
+        initGameOverTextField();
+        initGameOverBackground();
         zombies = new ArrayList<>();
         random = new Random();
     }
@@ -90,7 +92,7 @@ public class GameScreen extends AbstractScreen {
         buttonDebugTextureUp = new Texture("menu/debug_1.png");
         buttonDebugTextureDown = new Texture("menu/debug_2.png");
         buttonDebug = new MyButton(buttonDebugTextureUp, buttonDebugTextureDown);
-        buttonDebug.setPosition(NinjaGame.SCREEN_WIDTH - 200, NinjaGame.SCREEN_HEIGHT - 60);
+        buttonDebug.setPosition(GameScreenManager.SCREEN_WIDTH - 200, GameScreenManager.SCREEN_HEIGHT - 60);
         stage.addActor(buttonDebug);
     }
 
@@ -102,39 +104,35 @@ public class GameScreen extends AbstractScreen {
         buttonLeft = new MyButton(buttonLeftTexture, buttonLeftTexture);
         buttonRight = new MyButton(buttonRightTexture, buttonRightTexture);
         buttonAttack = new MyButton(buttonAttackTexture, buttonAttackTexture);
-        buttonLeft.setPosition(NinjaGame.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET - 10 - buttonLeft.getWidth(), OFFSET);
-        buttonRight.setPosition(NinjaGame.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET, OFFSET);
+        buttonLeft.setPosition(GameScreenManager.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET - 10 - buttonLeft.getWidth(), OFFSET);
+        buttonRight.setPosition(GameScreenManager.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET, OFFSET);
         buttonAttack.setPosition(OFFSET, OFFSET);
         stage.addActor(buttonLeft);
         stage.addActor(buttonRight);
         stage.addActor(buttonAttack);
     }
 
-    private void initTextField() {
+    private void initGameOverTextField() {
         Skin uiSkin = new Skin(Gdx.files.internal("default skin/uiskin.json"));
-        txtUsername = new TextField("", uiSkin);
-        txtUsername.setMessageText("Enter your name..");
-        txtUsername.setPosition(NinjaGame.SCREEN_WIDTH/2, NinjaGame.SCREEN_HEIGHT/2);
-        stage.addActor(txtUsername);
+        gameOverTextField = new TextField("", uiSkin);
+        gameOverTextField.setMessageText("Enter your name..");
+        gameOverTextField.setPosition(GameScreenManager.SCREEN_WIDTH/2 - gameOverTextField.getWidth()/2,
+                GameScreenManager.SCREEN_HEIGHT/2 - gameOverTextField.getHeight()/2);
     }
 
-    private void textFieldActions() {
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            String test = txtUsername.getText();
-//            new HighScoreScreen(game).addNewScore(test, 12);
-            System.out.println(test);
-//            game.setScreen(new HighScoreScreen(game));
-            NinjaGame.setHighscoreScreen();
-        }
+    private void initGameOverBackground() {
+        gameOverBackground = new Texture("menu/background-transparent-black.png");
+        gameOverBackgroundImg = new Image(gameOverBackground);
+        gameOverBackgroundImg.setPosition(0, 0);
     }
 
     private void backKeyListener() {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            NinjaGame.setMenuScreen();
+            GameScreenManager.setMenuScreen();
         }
     }
 
-    private void initButtonsListeners() {
+    private void buttonsListeners() {
         buttonDebug.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -145,48 +143,38 @@ public class GameScreen extends AbstractScreen {
         buttonLeft.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(!player.isDead()) {
-                    player.setMovingLeft(true);
-                    player.doMovement("LEFT");
-                }
+                player.setMovingLeft(true);
+                player.doMovement("LEFT");
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                if(!player.isDead()) {
-                    player.setMovingLeft(false);
-                    player.doMovement("IDLE");
-                }
+                player.setMovingLeft(false);
+                player.doMovement("IDLE");
             }
         });
         buttonRight.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(!player.isDead()) {
-                    player.setMovingRight(true);
-                    player.doMovement("RIGHT");
-                }
+                player.setMovingRight(true);
+                player.doMovement("RIGHT");
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                if(!player.isDead()) {
-                    player.setMovingRight(false);
-                    player.doMovement("IDLE");
-                }
+                player.setMovingRight(false);
+                player.doMovement("IDLE");
             }
         });
         buttonAttack.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(!player.isDead()) {
-                    player.setAttacking(true);
-                    player.doMovement("ATTACK");
-                }
+                player.setAttacking(true);
+                player.doMovement("ATTACK");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -194,13 +182,13 @@ public class GameScreen extends AbstractScreen {
 
     private void initPlayerHealthBar(){
         playerHealthBar = new PlayerHealthBar();
-        playerHealthBar.setPosition(5, NinjaGame.SCREEN_HEIGHT-5);
+        playerHealthBar.setPosition(5, GameScreenManager.SCREEN_HEIGHT-5);
         stage.addActor(playerHealthBar);
     }
 
     private void initPlayerScoreCounter() {
         playerScoreCounter = new PlayerScoreCounter();
-        playerScoreCounter.setPosition(5, NinjaGame.SCREEN_HEIGHT - 25);
+        playerScoreCounter.setPosition(5, GameScreenManager.SCREEN_HEIGHT - 25);
         stage.addActor(playerScoreCounter);
     }
 
@@ -231,6 +219,9 @@ public class GameScreen extends AbstractScreen {
         stage.draw();
 
         if(!player.isDead()) {
+            buttonsListeners();
+            moveActorsToFront();
+
             if (TimeUtils.millis() - lastZombieTime > SPAWN_TIME) {
                 spawnZombies();
             }
@@ -247,11 +238,24 @@ public class GameScreen extends AbstractScreen {
                 removeDeathZombie();
                 timeSinceDeath = 0;
             }
+        } else {
+            gameOverBehaviour();
         }
         checkPlayerDeath();
-        moveActorsToFront();
-        textFieldActions();
         backKeyListener();
+    }
+
+    private void gameOverBehaviour() {
+        stage.addActor(gameOverBackgroundImg);
+        gameOverBackgroundImg.toFront();
+        stage.addActor(gameOverTextField);
+        gameOverTextField.toFront();
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            HighScoreScreen.addNewScore(gameOverTextField.getText(), playerScoreCounter.getScore());
+            HighScoreScreen.isHighscoreListChanged = true;
+            GameScreenManager.disposeAndDeleteGameScreen();
+            GameScreenManager.setHighscoreScreen();
+        }
     }
 
     private void moveActorsToFront() {
