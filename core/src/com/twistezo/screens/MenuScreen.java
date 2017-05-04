@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.twistezo.NinjaGame;
+import com.twistezo.GameScreenManager;
 import com.twistezo.playground.PlayerFromSheet;
 
 /**
@@ -27,7 +27,7 @@ public class MenuScreen extends AbstractScreen {
     private Texture exitButtonUp;
     private Texture exitButtonDown;
 
-    public MenuScreen(NinjaGame game) {
+    public MenuScreen(GameScreenManager game) {
         super(game);
         init();
     }
@@ -76,14 +76,18 @@ public class MenuScreen extends AbstractScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                NinjaGame.setGameScreen();
+                if(GameScreenManager.gameScreen != null) {
+                    GameScreenManager.setGameScreen();
+                } else {
+                    GameScreenManager.createNewGameScreen();
+                }
             }
         });
         highscoreButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                NinjaGame.setHighscoreScreen();
+                GameScreenManager.setHighscoreScreen();
             }
         });
         exitButton.addListener(new ClickListener() {
