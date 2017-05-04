@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.twistezo.NinjaGame;
+import com.twistezo.GameScreenManager;
 
 /**
  * @author twistezo (30.04.2017)
@@ -61,7 +61,7 @@ public abstract class Zombie extends Actor {
         if(isZombieGoRight) {
             this.setX(-100);
         } else {
-            this.setX(NinjaGame.SCREEN_WIDTH);
+            this.setX(GameScreenManager.SCREEN_WIDTH);
         }
     }
 

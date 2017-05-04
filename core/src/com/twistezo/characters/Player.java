@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.twistezo.NinjaGame;
+import com.twistezo.GameScreenManager;
 
 /**
  * @author twistezo (23.04.2017)
@@ -190,8 +190,8 @@ public class Player extends Actor {
         if (this.getX() < 0) {
             this.setPosition(0, 50);
         }
-        if (this.getX() > NinjaGame.SCREEN_WIDTH - this.getWidth()) {
-            this.setPosition(NinjaGame.SCREEN_WIDTH - this.getWidth(), getY());
+        if (this.getX() > GameScreenManager.SCREEN_WIDTH - this.getWidth()) {
+            this.setPosition(GameScreenManager.SCREEN_WIDTH - this.getWidth(), getY());
         }
     }
 
