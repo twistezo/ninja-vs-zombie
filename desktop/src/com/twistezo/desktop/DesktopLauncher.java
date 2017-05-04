@@ -2,7 +2,7 @@ package com.twistezo.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.twistezo.NinjaGame;
+import com.twistezo.GameScreenManager;
 import com.twistezo.utils.GameSettings;
 
 public class DesktopLauncher {
@@ -11,9 +11,9 @@ public class DesktopLauncher {
 		config.title = "Drop";
 		config.width = GameSettings.SCREEN_WIDTH;
 		config.height = GameSettings.SCREEN_HEIGHT;
-        config.title = NinjaGame.GAME_NAME;
+        config.title = GameScreenManager.GAME_NAME;
         config.resizable = false;
-		new LwjglApplication(new NinjaGame(), config);
+		new LwjglApplication(new GameScreenManager(), config);
 	}
 }
 
