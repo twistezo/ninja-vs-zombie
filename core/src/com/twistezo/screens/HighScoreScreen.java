@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.twistezo.NinjaGame;
+import com.twistezo.GameScreenManager;
 import com.twistezo.utils.PlayerScore;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +24,8 @@ import java.util.Comparator;
  */
 
 public class HighScoreScreen extends AbstractScreen {
+    public static boolean isHighscoreListChanged = false;
+    private static ArrayList<PlayerScore> playerScoreList;
     private final int TABLE_SPACE = 5;
     private Skin uiSkin;
     private Texture background;
@@ -31,12 +33,11 @@ public class HighScoreScreen extends AbstractScreen {
     private Label testLabel;
     private Label.LabelStyle labelCustomFont;
     private ArrayList<Label> playerScoreLabelList;
-    private ArrayList<PlayerScore> playerScoreList;
     private Table table;
     private MyButton buttonLeft;
     private Texture buttonLeftTexture;
 
-    public HighScoreScreen(NinjaGame game) {
+    public HighScoreScreen(GameScreenManager game) {
         super(game);
         init();
     }
@@ -48,10 +49,6 @@ public class HighScoreScreen extends AbstractScreen {
         initBackground();
         initBackButton();
         initTestPlayersScores();
-        sortByScore();
-        cutScoresList(5);
-        generateLabelsFromPlayersScores();
-        initTable();
     }
 
     private void initSkinAndCustomFont() {
@@ -79,19 +76,17 @@ public class HighScoreScreen extends AbstractScreen {
         final int OFFSET = 25;
         buttonLeftTexture = new Texture("button-left.png");
         buttonLeft = new MyButton(buttonLeftTexture, buttonLeftTexture);
-        buttonLeft.setPosition(NinjaGame.SCREEN_WIDTH - buttonLeft.getWidth() - OFFSET, OFFSET);
+        buttonLeft.setPosition(GameScreenManager.SCREEN_WIDTH - buttonLeft.getWidth() - OFFSET, OFFSET);
         stage.addActor(buttonLeft);
     }
 
     private void initTestPlayersScores() {
-        addNewScore("John Smith", 1234);
-        addNewScore("Adam B", 4321);
-        addNewScore("Lorem Ips", 2);
-        addNewScore("a", 999999);
-        addNewScore("b", 0);
-        addNewScore("c", 1);
-        addNewScore("d", 154);
-        addNewScore("e", 65);
+        addNewScore("John Smith", 56);
+        addNewScore("Adam Bauer", 17);
+        addNewScore("Night Killer", 7);
+        addNewScore("Anna Stuck", 2);
+        addNewScore("Neo Man", 1);
+        isHighscoreListChanged = true;
     }
 
     private void sortByScore() {
@@ -122,23 +117,6 @@ public class HighScoreScreen extends AbstractScreen {
         }
     }
 
-    private void backButtonListeners() {
-        buttonLeft.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                NinjaGame.setMenuScreen();
-                return super.touchDown(event, x, y, pointer, button);
-            }
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                NinjaGame.setMenuScreen();
-            }
-        });
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            NinjaGame.setMenuScreen();
-        }
-    }
     private void initTable() {
         table = new Table(uiSkin);
         Label title = new Label("FIVE BEST KILLERS", uiSkin);
@@ -153,8 +131,26 @@ public class HighScoreScreen extends AbstractScreen {
         }
         table.left().top();
         table.setPosition(50, 50);
-        table.setSize(NinjaGame.SCREEN_WIDTH/3, NinjaGame.SCREEN_HEIGHT-190);
+        table.setSize(GameScreenManager.SCREEN_WIDTH/3, GameScreenManager.SCREEN_HEIGHT-190);
         stage.addActor(table);
+    }
+
+    private void backButtonListeners() {
+        buttonLeft.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                GameScreenManager.setMenuScreen();
+                return super.touchDown(event, x, y, pointer, button);
+            }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                GameScreenManager.setMenuScreen();
+            }
+        });
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            GameScreenManager.setMenuScreen();
+        }
     }
 
     @Override
@@ -164,6 +160,13 @@ public class HighScoreScreen extends AbstractScreen {
         spriteBatch.begin();
         stage.draw();
         spriteBatch.end();
+        if(isHighscoreListChanged) {
+            sortByScore();
+            cutScoresList(5);
+            generateLabelsFromPlayersScores();
+            initTable();
+            isHighscoreListChanged = false;
+        }
         backButtonListeners();
     }
 
@@ -171,7 +174,7 @@ public class HighScoreScreen extends AbstractScreen {
         stage.act();
     }
 
-    public void addNewScore(String name, int score) {
+    public static void addNewScore(String name, int score) {
         playerScoreList.add(new PlayerScore(name, score));
     }
 
