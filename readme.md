@@ -39,4 +39,9 @@ Features:
             <img src="http://i.imgur.com/0P37rBC.png" width="500">
         </td>
     </tr>
+    <tr>
+        <td>
+            <img src="http://i.imgur.com/cjgQ1xC.png" width="500">
+        </td>
+    </tr>
 </table>
