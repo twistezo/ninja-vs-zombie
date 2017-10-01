@@ -8,10 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-/**
- * @author twistezo (24.04.2017)
- */
-
 public class AnimationWithSheet extends ApplicationAdapter {
     private static final int FRAME_COLS = 10, FRAME_ROWS = 1;
     Animation<TextureRegion> walkAnimation; // Must declare frame type (TextureRegion)
@@ -22,8 +18,7 @@ public class AnimationWithSheet extends ApplicationAdapter {
     @Override
     public void create() {
         walkSheet = new Texture(Gdx.files.internal("sheets/ninja-idle-sheet.png"));
-        TextureRegion[][] tmp = TextureRegion.split(walkSheet,
-                walkSheet.getWidth() / FRAME_COLS,
+        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS,
                 walkSheet.getHeight() / FRAME_ROWS);
         TextureRegion[] walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;

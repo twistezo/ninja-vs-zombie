@@ -5,10 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-/**
- * @author twistezo (25.04.2017)
- */
-
 public class FpsCounter extends Actor {
     BitmapFont font;
 

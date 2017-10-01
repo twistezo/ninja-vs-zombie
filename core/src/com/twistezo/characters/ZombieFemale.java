@@ -5,10 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-/**
- * @author twistezo (30.04.2017)
- */
-
 public class ZombieFemale extends Zombie {
     private final String ZOMBIE_MOVE_FILE = "zombie-female-run-right.atlas";
     private final String ZOMBIE_ATTACK_FILE = "zombie-female-attack.atlas";

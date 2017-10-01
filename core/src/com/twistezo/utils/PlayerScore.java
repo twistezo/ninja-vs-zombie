@@ -1,9 +1,5 @@
 package com.twistezo.utils;
 
-/**
- * @author twistezo (03.05.2017)
- */
-
 public class PlayerScore {
     private String name;
     private int score;

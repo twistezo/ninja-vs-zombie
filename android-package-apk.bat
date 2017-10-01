@@ -1,1 +1,0 @@
-gradlew android:assembleRelease

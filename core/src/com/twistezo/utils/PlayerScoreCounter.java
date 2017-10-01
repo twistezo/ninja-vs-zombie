@@ -4,10 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-/**
- * @author twistezo (25.04.2017)
- */
-
 public class PlayerScoreCounter extends Actor {
     private BitmapFont font;
     private int score = 0;

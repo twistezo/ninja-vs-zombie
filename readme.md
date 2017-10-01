@@ -14,6 +14,27 @@ Java, libGDX, Photoshop
 - FPS counter
 - debug mode (actor bounds, drag’n’drop player)
 
+### Build/Run
+Android:
+```
+1. Create `local.properties` file with android SKD path:
+   sdk.dir=C\:\\Users\\*YOUR_USERNAME*\\AppData\\Local\\Android\\Sdk
+2. Generate .apk:
+   gradlew android:assembleRelease
+3. Generated .apk path:
+   /android/build/outputs/apk/
+```
+
+Desktop:
+```
+1. Generate .jar:
+   gradlew desktop:dist
+2. Generated .jar path:
+   /desktop/build/libs/
+3. To run:
+   gradlew desktop:run
+```
+
 ### Screenshots
 <table>
     <tr>
@@ -30,21 +51,3 @@ Java, libGDX, Photoshop
         </td>
     </tr>
 </table>
-
-### Build
-
-Android:
-* create local.properties file with your android SKD path
-`sdk.dir=C\:\\Users\\*YOUR_USERNAME*\\AppData\\Local\\Android\\Sdk`
-* package .apk
-`use android-package-apk.bat`
-* generated .apk file path
-`.../android/build/outputs/apk`
-
-Desktop:
-* package .jar
-`use desktop-package-jar.bat`
-* generated .jar file path
-`desktop/build/libs/`
-* run
-`use desktop-run.bat`

@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.twistezo.GameScreenManager;
 
 /**
- * @author twistezo (23.04.2017)
  * Abstract class for cleaning up every children screen classes
  */
 
@@ -19,10 +18,6 @@ public abstract class AbstractScreen implements Screen {
     protected Stage stage;
     private OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
-    private GameScreen gameScreen;
-    private MenuScreen menuScreen;
-    private HighScoreScreen highScoreScreen;
-
 
     public AbstractScreen(GameScreenManager game) {
         this.game = game;

@@ -7,14 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.twistezo.GameScreenManager;
-import com.twistezo.playground.PlayerFromSheet;
-
-/**
- * @author twistezo (23.04.2017)
- */
 
 public class MenuScreen extends AbstractScreen {
-    private PlayerFromSheet playerFromSheet;
     private Texture background;
     private Image backgroundImg;
     private MyButton playButton;
@@ -76,7 +70,7 @@ public class MenuScreen extends AbstractScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                if(GameScreenManager.gameScreen != null) {
+                if (GameScreenManager.gameScreen != null) {
                     GameScreenManager.setGameScreen();
                 } else {
                     GameScreenManager.createNewGameScreen();

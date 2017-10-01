@@ -19,10 +19,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**
- * @author twistezo (24.04.2017)
- */
-
 public class HighScoreScreen extends AbstractScreen {
     public static boolean isHighscoreListChanged = false;
     private static ArrayList<PlayerScore> playerScoreList;
@@ -30,7 +26,6 @@ public class HighScoreScreen extends AbstractScreen {
     private Skin uiSkin;
     private Texture background;
     private Image backgroundImg;
-    private Label testLabel;
     private Label.LabelStyle labelCustomFont;
     private ArrayList<Label> playerScoreLabelList;
     private Table table;
@@ -100,20 +95,14 @@ public class HighScoreScreen extends AbstractScreen {
 
     private void cutScoresList(int numberOfPositions) {
         while (playerScoreList.size() > numberOfPositions) {
-            playerScoreList.remove(
-                    playerScoreList.get(playerScoreList.size()-1));
+            playerScoreList.remove(playerScoreList.get(playerScoreList.size() - 1));
         }
     }
 
     private void generateLabelsFromPlayersScores() {
-        for(int i=0; i<playerScoreList.size(); i++) {
-            playerScoreLabelList.add(
-                    new Label(
-                            playerScoreList.get(i).getName()
-                                    + " - "
-                                    +playerScoreList.get(i).getScore()
-                                    + " pts"
-                            ,uiSkin));
+        for (int i = 0; i < playerScoreList.size(); i++) {
+            playerScoreLabelList.add(new Label(
+                    playerScoreList.get(i).getName() + " - " + playerScoreList.get(i).getScore() + " pts", uiSkin));
         }
     }
 
@@ -124,14 +113,14 @@ public class HighScoreScreen extends AbstractScreen {
         table.add(title).spaceBottom(TABLE_SPACE);
         table.row();
 
-        for(int i=0; i<playerScoreLabelList.size(); i++) {
+        for (int i = 0; i < playerScoreLabelList.size(); i++) {
             table.add(playerScoreLabelList.get(i)).spaceBottom(TABLE_SPACE).align(Align.left);
             playerScoreLabelList.get(i).setStyle(labelCustomFont);
             table.row();
         }
         table.left().top();
         table.setPosition(50, 50);
-        table.setSize(GameScreenManager.SCREEN_WIDTH/3, GameScreenManager.SCREEN_HEIGHT-190);
+        table.setSize(GameScreenManager.SCREEN_WIDTH / 3, GameScreenManager.SCREEN_HEIGHT - 190);
         stage.addActor(table);
     }
 
@@ -142,6 +131,7 @@ public class HighScoreScreen extends AbstractScreen {
                 GameScreenManager.setMenuScreen();
                 return super.touchDown(event, x, y, pointer, button);
             }
+
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
@@ -160,7 +150,7 @@ public class HighScoreScreen extends AbstractScreen {
         spriteBatch.begin();
         stage.draw();
         spriteBatch.end();
-        if(isHighscoreListChanged) {
+        if (isHighscoreListChanged) {
             sortByScore();
             cutScoresList(5);
             generateLabelsFromPlayersScores();
@@ -177,6 +167,5 @@ public class HighScoreScreen extends AbstractScreen {
     public static void addNewScore(String name, int score) {
         playerScoreList.add(new PlayerScore(name, score));
     }
-
 
 }

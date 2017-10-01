@@ -21,15 +21,9 @@ import com.twistezo.utils.PlayerScoreCounter;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * @author twistezo (24.04.2017)
- */
-
 public class GameScreen extends AbstractScreen {
     private final int SPAWN_TIME = 10 * 1000; //ms
     private Player player;
-    private ZombieMale zombieMale;
-    private ZombieFemale zombieFemale;
     private ArrayList<Zombie> zombies;
     private FpsCounter fpsCounter;
     private PlayerHealthBar playerHealthBar;
@@ -52,7 +46,6 @@ public class GameScreen extends AbstractScreen {
     private long lastZombieTime;
     private float timeSinceCollision = 0;
     private float timeSinceDeath = 0;
-    private boolean isCollision = false;
     private boolean isDebugMode = false;
 
     public GameScreen(GameScreenManager game) {
@@ -104,7 +97,8 @@ public class GameScreen extends AbstractScreen {
         buttonLeft = new MyButton(buttonLeftTexture, buttonLeftTexture);
         buttonRight = new MyButton(buttonRightTexture, buttonRightTexture);
         buttonAttack = new MyButton(buttonAttackTexture, buttonAttackTexture);
-        buttonLeft.setPosition(GameScreenManager.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET - 10 - buttonLeft.getWidth(), OFFSET);
+        buttonLeft.setPosition(
+                GameScreenManager.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET - 10 - buttonLeft.getWidth(), OFFSET);
         buttonRight.setPosition(GameScreenManager.SCREEN_WIDTH - buttonRight.getWidth() - OFFSET, OFFSET);
         buttonAttack.setPosition(OFFSET, OFFSET);
         stage.addActor(buttonLeft);
@@ -116,8 +110,8 @@ public class GameScreen extends AbstractScreen {
         Skin uiSkin = new Skin(Gdx.files.internal("default skin/uiskin.json"));
         gameOverTextField = new TextField("", uiSkin);
         gameOverTextField.setMessageText("Enter your name..");
-        gameOverTextField.setPosition(GameScreenManager.SCREEN_WIDTH/2 - gameOverTextField.getWidth()/2,
-                GameScreenManager.SCREEN_HEIGHT/2 - gameOverTextField.getHeight()/2);
+        gameOverTextField.setPosition(GameScreenManager.SCREEN_WIDTH / 2 - gameOverTextField.getWidth() / 2,
+                GameScreenManager.SCREEN_HEIGHT / 2 - gameOverTextField.getHeight() / 2);
     }
 
     private void initGameOverBackground() {
@@ -180,9 +174,9 @@ public class GameScreen extends AbstractScreen {
         });
     }
 
-    private void initPlayerHealthBar(){
+    private void initPlayerHealthBar() {
         playerHealthBar = new PlayerHealthBar();
-        playerHealthBar.setPosition(5, GameScreenManager.SCREEN_HEIGHT-5);
+        playerHealthBar.setPosition(5, GameScreenManager.SCREEN_HEIGHT - 5);
         stage.addActor(playerHealthBar);
     }
 
@@ -197,15 +191,15 @@ public class GameScreen extends AbstractScreen {
         stage.addActor(player);
     }
 
-    private void spawnZombies(){
+    private void spawnZombies() {
         int switcher = random.nextInt(2);
-        switch(switcher) {
-            case 0:
-                zombies.add(new ZombieMale(random.nextBoolean()));
-                break;
-            case 1:
-                zombies.add(new ZombieFemale(random.nextBoolean()));
-                break;
+        switch (switcher) {
+        case 0:
+            zombies.add(new ZombieMale(random.nextBoolean()));
+            break;
+        case 1:
+            zombies.add(new ZombieFemale(random.nextBoolean()));
+            break;
         }
         lastZombieTime = TimeUtils.millis();
     }
@@ -218,23 +212,23 @@ public class GameScreen extends AbstractScreen {
         update();
         stage.draw();
 
-        if(!player.isDead()) {
+        if (!player.isDead()) {
             buttonsListeners();
             moveActorsToFront();
 
             if (TimeUtils.millis() - lastZombieTime > SPAWN_TIME) {
                 spawnZombies();
             }
-            for(Zombie zombie : zombies) {
+            for (Zombie zombie : zombies) {
                 stage.addActor(zombie);
             }
-            if(timeSinceCollision > 0.75f) {
+            if (timeSinceCollision > 0.75f) {
                 checkCollision();
                 timeSinceCollision = 0;
             }
             zombieFollowPlayerX();
             checkZombieDeath();
-            if(timeSinceDeath > 2f) {
+            if (timeSinceDeath > 2f) {
                 removeDeathZombie();
                 timeSinceDeath = 0;
             }
@@ -266,11 +260,11 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void checkCollision() {
-        for(Zombie zombie : zombies) {
-            if(player.getBounds().overlaps(zombie.getBounds())){
+        for (Zombie zombie : zombies) {
+            if (player.getBounds().overlaps(zombie.getBounds())) {
                 zombie.setInEnemyBounds(true);
                 player.setInEnemyBounds(true);
-                if(player.isAttacking()) {
+                if (player.isAttacking()) {
                     zombie.decreaseHealth();
                 } else {
                     playerHealthBar.reducePlayerHealth();
@@ -283,16 +277,16 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void checkZombieDeath() {
-        for(int i=0; i<zombies.size(); i++) {
-            if(zombies.get(i).getHealth() <= 0) {
+        for (int i = 0; i < zombies.size(); i++) {
+            if (zombies.get(i).getHealth() <= 0) {
                 zombies.get(i).setDeath(true);
             }
         }
     }
 
     private void removeDeathZombie() {
-        for(int i=0; i<zombies.size(); i++) {
-            if(zombies.get(i).isReadyToRemove() && zombies.get(i).isDeath()){
+        for (int i = 0; i < zombies.size(); i++) {
+            if (zombies.get(i).isReadyToRemove() && zombies.get(i).isDeath()) {
                 playerScoreCounter.addScore();
                 zombies.get(i).remove();
                 zombies.remove(i);
@@ -301,14 +295,14 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void checkPlayerDeath() {
-        if(playerHealthBar.getPlayerHealth() <= 0) {
+        if (playerHealthBar.getPlayerHealth() <= 0) {
             player.setDead(true);
             playerHealthBar.setHealth(0);
         }
     }
 
     private void zombieFollowPlayerX() {
-        for(Zombie zombie : zombies) {
+        for (Zombie zombie : zombies) {
             zombie.setWalkTargetX(player.getPlayerCurrentX());
         }
     }
@@ -318,8 +312,8 @@ public class GameScreen extends AbstractScreen {
     }
 
     @Override
-    public void resize(int width, int height){
-        stage.getViewport().update(width,height);
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height);
     }
 
     private void toggleDebugMode(boolean value) {

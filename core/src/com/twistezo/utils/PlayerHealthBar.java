@@ -6,10 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Random;
 
-/**
- * @author twistezo (25.04.2017)
- */
-
 public class PlayerHealthBar extends Actor {
     private BitmapFont font;
     private int playerHealth = 100;

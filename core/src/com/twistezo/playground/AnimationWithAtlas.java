@@ -8,22 +8,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-/**
- * @author twistezo (24.04.2017)
- */
-
 public class AnimationWithAtlas extends ApplicationAdapter {
     private SpriteBatch batch;
     private TextureAtlas textureAtlas;
     private Animation<TextureRegion> animation;
     private float timePassed = 0;
 
-
     @Override
     public void create() {
         batch = new SpriteBatch();
         textureAtlas = new TextureAtlas(Gdx.files.internal("ninja-idle/ninja-idle.atlas"));
-        animation = new Animation<TextureRegion>(1/10f, textureAtlas.getRegions());
+        animation = new Animation<TextureRegion>(1 / 10f, textureAtlas.getRegions());
     }
 
     @Override
@@ -34,7 +29,7 @@ public class AnimationWithAtlas extends ApplicationAdapter {
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();

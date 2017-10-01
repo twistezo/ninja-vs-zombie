@@ -6,11 +6,7 @@ import com.twistezo.screens.GameScreen;
 import com.twistezo.screens.HighScoreScreen;
 import com.twistezo.screens.MenuScreen;
 
-/**
- * @author twistezo (23.04.2017)
- */
-
-public class GameScreenManager extends Game{
+public class GameScreenManager extends Game {
     public final static int SCREEN_WIDTH = 800;
     public final static int SCREEN_HEIGHT = 480;
     public final static String GAME_NAME = "ninja vs zombie";
@@ -42,6 +38,7 @@ public class GameScreenManager extends Game{
     public static void createNewGameScreen() {
         gameScreen = new GameScreen((GameScreenManager) GameScreenManager.game);
     }
+
     public static void disposeAndDeleteGameScreen() {
         gameScreen.dispose();
         gameScreen = null;

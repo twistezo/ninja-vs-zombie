@@ -14,14 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.twistezo.GameScreenManager;
 
-/**
- * @author twistezo (30.04.2017)
- */
-
 public abstract class Zombie extends Actor {
     private final float MOVEMENT_DURATION = 60f;
-    protected final float FRAME_DURATION = 1/10f;
-    private final float ZOMBIE_SCALE = 1/4f;
+    protected final float FRAME_DURATION = 1 / 10f;
+    private final float ZOMBIE_SCALE = 1 / 4f;
     private final int BOUNDS_SHIFT = 20;
     private final int HEALTH_TO_DECREASE = 25;
     private SpriteBatch spriteBatch;
@@ -58,7 +54,7 @@ public abstract class Zombie extends Actor {
 
     private void initZombieStartPosition() {
         this.setY(50);
-        if(isZombieGoRight) {
+        if (isZombieGoRight) {
             this.setX(-100);
         } else {
             this.setX(GameScreenManager.SCREEN_WIDTH);
@@ -70,47 +66,47 @@ public abstract class Zombie extends Actor {
     }
 
     private void doMovement(String movement) {
-        switch(Movement.valueOf(movement)) {
-            case WALK:
-                textureRegion = animationMove.getKeyFrame(stateTime, true);
-                if (isZombieGoRight) {
-                    if(this.getX() < walkTargetX) {
-                        isZombieFlippedToLeft = false;
-                        this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
-                    } else if (this.getX() > walkTargetX){
-                        isZombieFlippedToLeft = true;
-                        this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
-                    }
-                } else {
-                    if(this.getX() > walkTargetX) {
-                        isZombieFlippedToLeft = true;
-                        this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
-                    } else if (this.getX() < walkTargetX){
-                        isZombieFlippedToLeft = false;
-                        this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
-                        isZombieGoRight = true;
-                    }
-                }
-                setZombieWidthAndHeight();
-                break;
-            case ATTACK:
-                clearActions();
-                if (isZombieGoRight) {
-                    textureRegion = animationAttack.getKeyFrame(stateTime,true);
-                } else {
+        switch (Movement.valueOf(movement)) {
+        case WALK:
+            textureRegion = animationMove.getKeyFrame(stateTime, true);
+            if (isZombieGoRight) {
+                if (this.getX() < walkTargetX) {
+                    isZombieFlippedToLeft = false;
+                    this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
+                } else if (this.getX() > walkTargetX) {
                     isZombieFlippedToLeft = true;
-                    textureRegion = animationAttack.getKeyFrame(stateTime,true);
+                    this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
                 }
-                setZombieWidthAndHeight();
-                break;
-            case DEAD:
-                if(!animationDead.isAnimationFinished(stateDeadTime)){
-                    textureRegion = animationDead.getKeyFrame(stateDeadTime);
-                } else {
-                    isReadyToRemove = true;
+            } else {
+                if (this.getX() > walkTargetX) {
+                    isZombieFlippedToLeft = true;
+                    this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
+                } else if (this.getX() < walkTargetX) {
+                    isZombieFlippedToLeft = false;
+                    this.addAction(Actions.moveTo(walkTargetX, getY(), MOVEMENT_DURATION));
+                    isZombieGoRight = true;
                 }
-                setZombieWidthAndHeight();
-                break;
+            }
+            setZombieWidthAndHeight();
+            break;
+        case ATTACK:
+            clearActions();
+            if (isZombieGoRight) {
+                textureRegion = animationAttack.getKeyFrame(stateTime, true);
+            } else {
+                isZombieFlippedToLeft = true;
+                textureRegion = animationAttack.getKeyFrame(stateTime, true);
+            }
+            setZombieWidthAndHeight();
+            break;
+        case DEAD:
+            if (!animationDead.isAnimationFinished(stateDeadTime)) {
+                textureRegion = animationDead.getKeyFrame(stateDeadTime);
+            } else {
+                isReadyToRemove = true;
+            }
+            setZombieWidthAndHeight();
+            break;
         }
     }
 
@@ -119,11 +115,11 @@ public abstract class Zombie extends Actor {
         super.act(delta);
         stateTime += delta;
 
-        if(isDeath) {
+        if (isDeath) {
             stateDeadTime += delta;
             doMovement("DEAD");
         } else {
-            if(isInEnemyBounds) {
+            if (isInEnemyBounds) {
                 doMovement("ATTACK");
             } else {
                 doMovement("WALK");
@@ -135,21 +131,13 @@ public abstract class Zombie extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         if (isZombieFlippedToLeft) {
-            batch.draw(textureRegion,
-                    getX(),getY(),
-                    getWidth()/2,getHeight()/2,
-                    getWidth(), getHeight(),
-                    getScaleX()*-1,getScaleY(),
-                    getRotation());
+            batch.draw(textureRegion, getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(),
+                    getScaleX() * -1, getScaleY(), getRotation());
         } else {
-            batch.draw(textureRegion,
-                    getX(),getY(),
-                    getWidth()/2,getHeight()/2,
-                    getWidth(), getHeight(),
-                    getScaleX(),getScaleY(),
-                    getRotation());
+            batch.draw(textureRegion, getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(),
+                    getScaleX(), getScaleY(), getRotation());
         }
-        if(isDebugMode) {
+        if (isDebugMode) {
             batch.end();
             drawDebugBounds();
             batch.begin();
@@ -163,7 +151,8 @@ public abstract class Zombie extends Actor {
     }
 
     public Rectangle getBounds() {
-        bounds = new Rectangle((int)getX() + BOUNDS_SHIFT, (int)getY(), (int)getWidth() - 2 * BOUNDS_SHIFT, (int)getHeight());
+        bounds = new Rectangle((int) getX() + BOUNDS_SHIFT, (int) getY(), (int) getWidth() - 2 * BOUNDS_SHIFT,
+                (int) getHeight());
         return bounds;
     }
 

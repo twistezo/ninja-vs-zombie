@@ -7,25 +7,20 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-/**
- * @author twistezo (23.04.2017)
- */
-
 public class PlayerFromSheet extends Actor {
     private static final int FRAME_COLS = 10, FRAME_ROWS = 1;
     private Animation<TextureRegion> walkAnimation;
     private TextureRegion textureRegion;
     private float stateTime;
 
-    public PlayerFromSheet(){
+    public PlayerFromSheet() {
         generateRegionFromSheet();
     }
 
     private void generateRegionFromSheet() {
         Texture walkSheet = new Texture(Gdx.files.internal("sheets/ninja-idle-sheet.png"));
 
-        TextureRegion[][] tmp = TextureRegion.split(walkSheet,
-                walkSheet.getWidth() / FRAME_COLS,
+        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS,
                 walkSheet.getHeight() / FRAME_ROWS);
 
         TextureRegion[] walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
@@ -46,18 +41,14 @@ public class PlayerFromSheet extends Actor {
         super.act(delta);
 
         stateTime += delta;
-        textureRegion = walkAnimation.getKeyFrame(stateTime,true);
+        textureRegion = walkAnimation.getKeyFrame(stateTime, true);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(textureRegion,
-                getX(),getY(),
-                getWidth()/2,getHeight()/2,
-                getWidth(),getHeight(),
-                getScaleX(),getScaleY(),
-                getRotation());
+        batch.draw(textureRegion, getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(),
+                getScaleY(), getRotation());
     }
 
     public float getRegionHeight() {
@@ -68,4 +59,3 @@ public class PlayerFromSheet extends Actor {
         return textureRegion.getRegionWidth();
     }
 }
-
