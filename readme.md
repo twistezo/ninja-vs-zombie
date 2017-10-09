@@ -1,7 +1,7 @@
 ## Ninja vs Zombie
 
 ### Description
-Android/Desktop 2d platform fully animated game
+Android/Desktop 2d platform fully animated game (non-commercial)
 
 ### Tools
 Java, libGDX, Photoshop
