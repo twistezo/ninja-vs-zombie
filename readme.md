@@ -28,11 +28,11 @@ Android:
 Desktop:
 ```
 1. Generate .jar:
-   gradlew desktop:dist
+   gradlew desktop:dist or ./gradlew.bat desktop:dist
 2. Generated .jar path:
    /desktop/build/libs/
 3. To run:
-   gradlew desktop:run
+   gradlew desktop:run or ./gradlew.bat desktop:run
 ```
 
 ### Screenshots
