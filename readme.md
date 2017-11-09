@@ -1,5 +1,4 @@
 ## Ninja vs Zombie
-[![Build Status](https://travis-ci.org/twistezo/ninja-vs-zombie.svg?branch=master)](https://travis-ci.org/twistezo/ninja-vs-zombie)
 
 ### Description
 Android/Desktop 2d platform fully animated game (non-commercial)
