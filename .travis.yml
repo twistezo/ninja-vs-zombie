@@ -1,3 +1,6 @@
 language: java
 sudo: false
-install: ./gradlew desktop:dist
+before_install:
+ - chmod +x gradlew
+install: 
+ - ./gradlew desktop:dist
