@@ -49,5 +49,8 @@ Desktop:
         <td>
             <img src="http://i.imgur.com/cjgQ1xC.png" width="500">
         </td>
+        <td>
+            <img src="https://media.giphy.com/media/B32c2K6CFVM9QfJ6y5/giphy.gif" width="500">
+        </td>
     </tr>
 </table>
