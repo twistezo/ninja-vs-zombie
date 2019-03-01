@@ -1,12 +1,15 @@
 ## Ninja vs Zombie
 
 ### Description
-Android/Desktop 2D platform fully animated game
+
+Android/Desktop 2D platform animated game
 
 ### Tools
+
 Java, libGDX, Photoshop
 
 ### Features
+
 - keys/touch steering
 - random generating enemies
 - enemies following player
@@ -15,7 +18,9 @@ Java, libGDX, Photoshop
 - debug mode (actor bounds, drag’n’drop player)
 
 ### Build/Run
+
 Android:
+
 ```
 1. Create `local.properties` file with android SKD path:
    sdk.dir=C\:\\Users\\*YOUR_USERNAME*\\AppData\\Local\\Android\\Sdk
@@ -26,6 +31,7 @@ Android:
 ```
 
 Desktop:
+
 ```
 1. Generate .jar:
    gradlew desktop:dist or ./gradlew desktop:dist
@@ -36,6 +42,7 @@ Desktop:
 ```
 
 ### Screenshots
+
 <table>
     <tr>
         <td>
